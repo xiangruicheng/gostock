@@ -51,6 +51,39 @@ func KlineList(symbol string, days int64) ([]*Kline, error) {
 	return klines, nil
 }
 
+// StockAll all stock
+func StockAll() ([]*StockCN, error) {
+	var stockCNList []*StockCN
+
+	api := "https://stock.xueqiu.com/v5/stock/screener/quote/list.json"
+	var uri url.URL
+	param := uri.Query()
+	param.Add("page", "1")
+	param.Add("size", "6000")
+	param.Add("order", "desc")
+	param.Add("orderby", "symbol")
+	param.Add("order_by", "symbol")
+	param.Add("market", "CN")
+	param.Add("type", "sh_sz")
+	queryStr := param.Encode()
+	url := fmt.Sprintf("%s?%s", api, queryStr)
+
+	responseStr := request(url)
+	if responseStr == "" {
+		return stockCNList, nil
+	}
+
+	stockAllResponse := new(StockAllResponse)
+	json.Unmarshal([]byte(responseStr), &stockAllResponse)
+	for _, item := range stockAllResponse.Data.List {
+		stockCN := new(StockCN)
+		stockCN.Code = item.Symbol
+		stockCN.Name = item.Name
+		stockCNList = append(stockCNList, stockCN)
+	}
+	return stockCNList, nil
+}
+
 // request send http request
 func request(url string) string {
 	client := &http.Client{}

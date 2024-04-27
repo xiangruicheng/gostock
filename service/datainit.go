@@ -6,6 +6,7 @@ import (
 	"gostock/datasource/xueqiu"
 	"gostock/model"
 	"gostock/util"
+	"strings"
 	"time"
 )
 
@@ -39,4 +40,25 @@ func Kline(code string) int64 {
 		return 0
 	}
 	return affectedRows
+}
+
+// StockInfo Init stock info
+func StockInfo() int64 {
+	stockCNList, err := xueqiu.StockAll()
+	if err != nil {
+		fmt.Println(err)
+		return 0
+	}
+	for _, stockCN := range stockCNList {
+		market := stockCN.Code[0:2]
+		stockInfoRecord := new(model.StockInfoRecord)
+		stockInfoRecord.Code = strings.TrimLeft(stockCN.Code, market)
+		stockInfoRecord.Name = stockCN.Name
+		stockInfoRecord.Market = market
+		stockInfoRecord.Type = model.StockInfoModel_TypeStock
+		stockInfoRecord.CTime = time.Now().Unix()
+		stockInfoRecord.UTime = time.Now().Unix()
+		new(model.StockInfoModel).Insert(stockInfoRecord)
+	}
+	return 0
 }

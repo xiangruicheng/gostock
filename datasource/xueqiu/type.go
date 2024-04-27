@@ -10,6 +10,16 @@ type KlineListResponse struct {
 	ErrorDescription string `json:"error_description"`
 }
 
+type StockAllResponse struct {
+	Data struct {
+		Count int `json:"count"`
+		List  []struct {
+			Symbol string `json:"symbol"`
+			Name   string `json:"name"`
+		} `json:"list"`
+	} `json:"data"`
+}
+
 type Kline struct {
 	Time    float64 `json:"time"`
 	Volume  float64 `json:"volume"`
@@ -20,4 +30,9 @@ type Kline struct {
 	Low     float64 `json:"low"`
 	Chg     float64 `json:"chg"`
 	Percent float64 `json:"percent"`
+}
+
+type StockCN struct {
+	Code string `json:"code"`
+	Name string `json:"name"`
 }
