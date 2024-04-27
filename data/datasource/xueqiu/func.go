@@ -27,7 +27,6 @@ func KlineList(symbol string, days int64) ([]*Kline, error) {
 	param.Add("indicator", "kline,pe,pb,ps,pcf,market_capital,agt,ggt,balance")
 	queryStr := param.Encode()
 	url := fmt.Sprintf("%s?%s", api, queryStr)
-
 	responseStr := request(url)
 	if responseStr == "" {
 		return klines, nil

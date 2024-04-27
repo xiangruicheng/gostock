@@ -1,6 +1,7 @@
 ```
 CREATE TABLE `kline` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '类别 1GP 2指数 3ETF',
   `code` varchar(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '代码',
   `date` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '日期',
   `volume` decimal(20,0) NOT NULL DEFAULT '0' COMMENT '成交量-手',
@@ -14,8 +15,9 @@ CREATE TABLE `kline` (
   `c_time` int unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `u_time` int unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `idxc_code_date` (`code`,`date`) USING BTREE
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='k线';
+  UNIQUE KEY `uniq_key` (`code`,`date`,`type`) USING BTREE,
+  KEY `idx_code` (`code`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='k线';
 
 CREATE TABLE `stock_info` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -29,7 +31,7 @@ CREATE TABLE `stock_info` (
   `c_time` int unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `u_time` int unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `code` (`code`) USING BTREE
+  UNIQUE KEY `uniq_code_type` (`code`,`type`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='股票信息';
 
 ```

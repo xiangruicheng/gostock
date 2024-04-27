@@ -25,7 +25,17 @@ type ConfigType struct {
 		InitNum int64  `yaml:"init-num"`
 		IncrNum int64  `yaml:"incr-num"`
 		Cookie  string `yaml:"cookie"`
-	}
+	} `yaml:"xueqiu"`
+	Etf []struct {
+		Name   string `yaml:"name"`
+		Market string `yaml:"market"`
+		Code   string `yaml:"code"`
+	} `yaml:"etf"`
+	Index []struct {
+		Name   string `yaml:"name"`
+		Market string `yaml:"market"`
+		Code   string `yaml:"code"`
+	} `yaml:"index"`
 }
 
 var Data ConfigType
@@ -36,12 +46,12 @@ func InitConfig() {
 	// 读取YAML文件内容
 	data, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		log.Fatalf("init config error %s: %v", filePath, err)
+		log.Fatalf("datainit config error %s: %v", filePath, err)
 	}
 	// 解析YAML内容到Config结构体
 	err = yaml.Unmarshal(data, &Data)
 	if err != nil {
-		log.Fatalf("init config Error parsing YAML: %v", err)
+		log.Fatalf("datainit config Error parsing YAML: %v", err)
 	}
-	log.Println("init config success")
+	log.Println("datainit config success")
 }

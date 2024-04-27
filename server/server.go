@@ -22,13 +22,13 @@ func InitMysql() {
 		config.Data.Mysql.Dbname)
 	db, err := sql.Open("mysql", dns)
 	if err != nil {
-		log.Println("init MysqlClient fail")
+		log.Println("datainit MysqlClient fail")
 		return
 	}
 
 	err = db.Ping()
 	if err != nil {
-		log.Println("init MysqlClient fail")
+		log.Println("datainit MysqlClient fail")
 		return
 	}
 	// 设置连接池的最大空闲连接数
@@ -37,7 +37,7 @@ func InitMysql() {
 	db.SetMaxOpenConns(1000)
 
 	MysqlClient = db
-	log.Println("init MysqlClient success")
+	log.Println("datainit MysqlClient success")
 }
 
 // InitRedis 初始化Redis客户端
@@ -50,8 +50,8 @@ func InitRedis() {
 
 	_, err := RedisClient.Ping(context.Background()).Result()
 	if err != nil {
-		log.Println("redis init fail")
+		log.Println("redis datainit fail")
 		return
 	}
-	log.Println("init RedisClient success")
+	log.Println("datainit RedisClient success")
 }

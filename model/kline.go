@@ -7,7 +7,8 @@ import (
 )
 
 type KlineRecord struct {
-	Id      int     `json:"id"`
+	Id      int64   `json:"id"`
+	Type    int64   `json:"type"`
 	Code    string  `json:"code"`
 	Date    string  `json:"date"`
 	Amount  float64 `json:"amount"`
@@ -25,73 +26,45 @@ type KlineRecord struct {
 type KlineModel struct {
 }
 
-// GetById get by id
-func (model *KlineModel) GetById(id int) (*KlineRecord, error) {
-	sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where id=?"
-	row, err := server.MysqlClient.Query(sql, id)
-	defer row.Close()
-	if err != nil {
-		return nil, err
-	}
-	quotationRecord := new(KlineRecord)
-	if row.Next() {
-		err = row.Scan(&quotationRecord.Id,
-			&quotationRecord.Code,
-			&quotationRecord.Date,
-			&quotationRecord.Volume,
-			&quotationRecord.Open,
-			&quotationRecord.High,
-			&quotationRecord.Low,
-			&quotationRecord.Close,
-			&quotationRecord.Chg,
-			&quotationRecord.Percent,
-			&quotationRecord.CTime,
-			&quotationRecord.UTime)
-		if err != nil {
-			return nil, err
-		}
-	}
-	return quotationRecord, nil
-}
-
 // GetByCode Get by code
 func (model *KlineModel) GetByCode(code string) ([]*KlineRecord, error) {
-	sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where code=?"
+	sql := "SELECT id,type,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where code=?"
 	rows, err := server.MysqlClient.Query(sql, code)
 	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
-	quotationRecords := []*KlineRecord{}
+	klineRecords := []*KlineRecord{}
 
 	for rows.Next() {
-		quotationRecord := new(KlineRecord)
-		err = rows.Scan(&quotationRecord.Id,
-			&quotationRecord.Code,
-			&quotationRecord.Date,
-			&quotationRecord.Volume,
-			&quotationRecord.Open,
-			&quotationRecord.High,
-			&quotationRecord.Low,
-			&quotationRecord.Close,
-			&quotationRecord.Chg,
-			&quotationRecord.Percent,
-			&quotationRecord.CTime,
-			&quotationRecord.UTime)
+		klineRecord := new(KlineRecord)
+		err = rows.Scan(&klineRecord.Id,
+			&klineRecord.Type,
+			&klineRecord.Code,
+			&klineRecord.Date,
+			&klineRecord.Volume,
+			&klineRecord.Open,
+			&klineRecord.High,
+			&klineRecord.Low,
+			&klineRecord.Close,
+			&klineRecord.Chg,
+			&klineRecord.Percent,
+			&klineRecord.CTime,
+			&klineRecord.UTime)
 		if err != nil {
 			return nil, err
 		}
-		quotationRecords = append(quotationRecords, quotationRecord)
+		klineRecords = append(klineRecords, klineRecord)
 	}
-	return quotationRecords, nil
+	return klineRecords, nil
 }
 
 // Insert insert
 func (model *KlineModel) Insert(record *KlineRecord) (int64, error) {
 	var id int64 = 0
 
-	sql := "INSERT IGNORE INTO `kline` (`code`, `date`, `volume`, `amount`, `open`, `high`, `low`, `close`, `chg`, `percent`, `c_time`, `u_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
-	res, err := server.MysqlClient.Exec(sql, record.Code, record.Date, record.Volume, record.Amount, record.Open, record.High, record.Low, record.Close, record.Chg, record.Percent, record.CTime, record.UTime)
+	sql := "INSERT IGNORE INTO `kline` (`type`,`code`, `date`, `volume`, `amount`, `open`, `high`, `low`, `close`, `chg`, `percent`, `c_time`, `u_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+	res, err := server.MysqlClient.Exec(sql, record.Type, record.Code, record.Date, record.Volume, record.Amount, record.Open, record.High, record.Low, record.Close, record.Chg, record.Percent, record.CTime, record.UTime)
 	if err != nil {
 		return id, err
 	}
@@ -107,9 +80,9 @@ func (model *KlineModel) Insert(record *KlineRecord) (int64, error) {
 func (model *KlineModel) BatchInsert(records []*KlineRecord) (int64, error) {
 	var rowsAffected int64 = 0
 
-	sql := "INSERT IGNORE INTO `kline` (`code`, `date`, `volume`, `amount`, `open`, `high`, `low`, `close`, `chg`, `percent`, `c_time`, `u_time`) VALUES "
+	sql := "INSERT IGNORE INTO `kline` (`type`,`code`, `date`, `volume`, `amount`, `open`, `high`, `low`, `close`, `chg`, `percent`, `c_time`, `u_time`) VALUES "
 	for _, record := range records {
-		sql += fmt.Sprintf(" (%s, %s, %f, %f, %f, %f, %f, %f, %f, %f, %d, %d),", record.Code, record.Date, record.Volume, record.Amount, record.Open, record.High, record.Low, record.Close, record.Chg, record.Percent, record.CTime, record.UTime)
+		sql += fmt.Sprintf(" (%d,'%s', '%s', %f, %f, %f, %f, %f, %f, %f, %f, %d, %d),", record.Type, record.Code, record.Date, record.Volume, record.Amount, record.Open, record.High, record.Low, record.Close, record.Chg, record.Percent, record.CTime, record.UTime)
 	}
 	sql = strings.TrimRight(sql, ",")
 	res, err := server.MysqlClient.Exec(sql)

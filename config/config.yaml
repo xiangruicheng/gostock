@@ -15,6 +15,25 @@ mysql:
 xueqiu:
   init-num: 3000
   incr-num: 5
-  cookie: cookiesu=331693906571177; device_id=8186d82194121188c1cd663d3ef9b95d; s=b412f8hns3; xq_a_token=5eeab96bfda3e05af7b6ef9e4626c2d12040b664; xqat=5eeab96bfda3e05af7b6ef9e4626c2d12040b664; xq_r_token=7548941cfe5a4311622757e10bf21aacf79c4843; xq_id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1aWQiOi0xLCJpc3MiOiJ1YyIsImV4cCI6MTcxNjI1MjY4MCwiY3RtIjoxNzE0MTQ3MjMxNTU0LCJjaWQiOiJkOWQwbjRBWnVwIn0.EiYnuJlqhoJwHf2hl3yVQGHwXdx9P1Iqh7PnDQIosYti_t-FHNR79gyZ-y0c3t5v5YuLkzL4VDmCDpW9DfxJIY7bfFoZM3IdikbTygoM67GLBkkLEWemMediygEJ6nOvvBgvAfl__jzwa0M6oAp48JUg1eD3hrYqwF-MffAoLhU-tghL6X7nqgvdLoC7MdHZzbUhqTXmBoXQ04th4VtGbmOBVjloLRrgxos3e2YjtEVu5KvfzgdkR439aDoVfirfXTfEKGry4QLAiv8ywcU6nIy7h0uQHo6aciEit4ydgg6tUZwO-wCGSkrx6NxamtmsgxAdb1cyHy-yVtnwWVVUgg; u=331693906571177; Hm_lvt_1db88642e346389874251b5a1eded6e3=1714147270; is_overseas=0; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1714147285
+  cookie: cookiesu=331693906571177; device_id=8186d82194121188c1cd663d3ef9b95d; s=b412f8hns3; Hm_lvt_1db88642e346389874251b5a1eded6e3=1714147270; remember=1; xq_a_token=f34b0a1cfe0608e50052ecb5fb91eb72136831f2; xqat=f34b0a1cfe0608e50052ecb5fb91eb72136831f2; xq_id_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1aWQiOjUwMDUxNzYyNTUsImlzcyI6InVjIiwiZXhwIjoxNzE2NjI5MzM3LCJjdG0iOjE3MTQxNzk4MjQ4NTYsImNpZCI6ImQ5ZDBuNEFadXAifQ.lERHDqliUNJORU1LijF7lB0i0MAPOxQ0K7AeH4GHlikkurmjoG4-2gwu3OYgNWrUK_MPNQFXBQRJ7BVPyS3sIj-8Saxbo_RKqZXd93O7IY3b3E9j64zQc_yHh4H5NnEVLSCweOXkTEHAtAs615TB5_WwyS-cUTaZw8ce34qy1Mvbmg6tkvBW-5anZFzLFU99bCrnPsNB6692wmtTPU-gDibR07ZFrCKiQJ3PTkKn9bPYXj3iOEDj2-s6KBb6OD8y-hFoBpyjp1U4kTyDEwLXGnOtAK4rU_0bf3N70RPZ_35Mm5-D81F8zCI_DIqS5khLnM4KccBIxDUQaqHTIgc35g; xq_r_token=297ea2695cc0badb8b93ce7b90a2f513d75a9982; xq_is_login=1; u=5005176255; is_overseas=0; Hm_lpvt_1db88642e346389874251b5a1eded6e3=1714189693
+
+etf:
+  - name: 创业板ETF
+    market: SZ
+    code: 159915
+  - name: 光伏ETF
+    market: SH
+    code: 515790
+
+index:
+  - name: 上证指数
+    market: SH
+    code: 000001
+  - name: 深圳成指
+    market: SZ
+    code: 399001
+  - name: 创业版指
+    market: SZ
+    code: 399006
 
 
