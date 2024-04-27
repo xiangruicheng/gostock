@@ -28,6 +28,60 @@ const (
 type StockInfoModel struct {
 }
 
+func (model *StockInfoModel) GetByCode(code string) (*StockInfoRecord, error) {
+	sql := "SELECT id,code,name,market,type,cyb,hs300,kcb,c_time,u_time FROM stock_info where code=?"
+	rows, err := server.MysqlClient.Query(sql, code)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	stockInfoRecord := new(StockInfoRecord)
+	if rows.Next() {
+		err = rows.Scan(&stockInfoRecord.Id,
+			&stockInfoRecord.Code,
+			&stockInfoRecord.Name,
+			&stockInfoRecord.Market,
+			&stockInfoRecord.Type,
+			&stockInfoRecord.Cyb,
+			&stockInfoRecord.Hs300,
+			&stockInfoRecord.Kcb,
+			&stockInfoRecord.CTime,
+			&stockInfoRecord.UTime)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return stockInfoRecord, nil
+}
+
+func (model *StockInfoModel) GetAll() ([]*StockInfoRecord, error) {
+	sql := "SELECT id,code,name,market,type,cyb,hs300,kcb,c_time,u_time FROM stock_info "
+	rows, err := server.MysqlClient.Query(sql)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	stockInfoRecords := []*StockInfoRecord{}
+	for rows.Next() {
+		stockInfoRecord := new(StockInfoRecord)
+		err = rows.Scan(&stockInfoRecord.Id,
+			&stockInfoRecord.Code,
+			&stockInfoRecord.Name,
+			&stockInfoRecord.Market,
+			&stockInfoRecord.Type,
+			&stockInfoRecord.Cyb,
+			&stockInfoRecord.Hs300,
+			&stockInfoRecord.Kcb,
+			&stockInfoRecord.CTime,
+			&stockInfoRecord.UTime)
+		if err != nil {
+			return nil, err
+		}
+		stockInfoRecords = append(stockInfoRecords, stockInfoRecord)
+	}
+	return stockInfoRecords, nil
+}
+
 // Insert insert
 func (model *StockInfoModel) Insert(record *StockInfoRecord) (int64, error) {
 	var id int64 = 0

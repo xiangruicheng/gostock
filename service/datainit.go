@@ -5,16 +5,17 @@ import (
 	"gostock/config"
 	"gostock/datasource/xueqiu"
 	"gostock/model"
+	"gostock/server"
 	"gostock/util"
 	"strings"
 	"time"
 )
 
-func Kline(code string) int64 {
-	symbol := "SZ" + code
+func InitKline(code string, market string) int64 {
+	symbol := market + code
 	klines, err := xueqiu.KlineList(symbol, config.Data.Xueqiu.InitNum)
 	if err != nil {
-		fmt.Printf("%s初始化错误%s\n", symbol, err.Error())
+		server.Log(server.LogLevelError, err.Error())
 		return 0
 	}
 	klineRecords := []*model.KlineRecord{}
@@ -42,8 +43,19 @@ func Kline(code string) int64 {
 	return affectedRows
 }
 
-// StockInfo Init stock info
-func StockInfo() int64 {
+func BatchInitKline() {
+	stockInfoRecords, err := new(model.StockInfoModel).GetAll()
+	if err != nil {
+		server.Log(server.LogLevelError, err.Error())
+		return
+	}
+	for _, stockInfoRecord := range stockInfoRecords {
+		InitKline(stockInfoRecord.Code, stockInfoRecord.Market)
+		server.Log(server.LogLevelInfo, fmt.Sprintf("init kline code=%s", stockInfoRecord.Code))
+	}
+}
+
+func InitStockInfo() int64 {
 	stockCNList, err := xueqiu.StockAll()
 	if err != nil {
 		fmt.Println(err)

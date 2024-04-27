@@ -11,8 +11,7 @@ func main() {
 	server.InitRedis()
 	server.InitMysql()
 
-	//datainit.Kline("159915")
-
-	datainit.StockInfo()
+	datainit.BatchInitKline()
+	//datainit.InitStockInfo()
 
 }
