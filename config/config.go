@@ -21,6 +21,10 @@ type ConfigType struct {
 		Password string `yaml:"password"`
 		Dbname   string `yaml:"dbname"`
 	} `yaml:"mysql"`
+	DDL struct {
+		Path   string   `yaml:"path"`
+		Tables []string `yaml:"tables"`
+	} `yaml:"ddl"`
 	Xueqiu struct {
 		InitNum int64  `yaml:"init-num"`
 		IncrNum int64  `yaml:"incr-num"`

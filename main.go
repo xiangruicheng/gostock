@@ -2,7 +2,6 @@ package main
 
 import (
 	"gostock/config"
-	"gostock/data/datainit"
 	"gostock/server"
 )
 
@@ -11,7 +10,9 @@ func main() {
 	server.InitRedis()
 	server.InitMysql()
 
-	datainit.BatchInitKline()
+	//ddl.Create()
+
+	//datainit.BatchInitKline()
 	//datainit.InitStockInfo()
 	//datainit.InitKline("515790", "SH", config.Data.Xueqiu.InitNum)
 	//datainit.InitKline("159915", "SZ", config.Data.Xueqiu.InitNum)

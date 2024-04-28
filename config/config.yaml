@@ -8,9 +8,15 @@ redis:
 mysql:
   host: 127.0.0.1
   port: 3306
-  username: root
-  password: mysql123
+  username: admin
+  password: admin123
   dbname: stock
+
+ddl:
+  path: data/ddl/
+  tables:
+    - kline
+    - stock_info
 
 xueqiu:
   init-num: 3000
