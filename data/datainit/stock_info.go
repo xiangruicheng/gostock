@@ -46,7 +46,7 @@ func initEtfType() {
 func initStockType() {
 	stockCNList, err := xueqiu.StockAll()
 	if err != nil {
-		server.Log(server.LogLevelError, err.Error())
+		server.Log.Error(err.Error())
 		return
 	}
 	for _, stockCN := range stockCNList {

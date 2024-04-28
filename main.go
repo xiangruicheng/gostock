@@ -2,6 +2,7 @@ package main
 
 import (
 	"gostock/config"
+	"gostock/data/ddl"
 	"gostock/server"
 )
 
@@ -10,7 +11,9 @@ func main() {
 	server.InitRedis()
 	server.InitMysql()
 
-	//ddl.Create()
+	ddl.Create()
+
+	//server.Log(server.LogLevelDebug, "this is error")
 
 	//datainit.BatchInitKline()
 	//datainit.InitStockInfo()

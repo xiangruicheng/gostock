@@ -27,7 +27,7 @@ func createDatabase() error {
 	if err != nil {
 		return err
 	}
-	server.Log(server.LogLevelInfo, "create databases success")
+	server.Log.Info("create databases success")
 	return nil
 }
 
@@ -44,7 +44,7 @@ func createTables() error {
 		if err != nil {
 			return err
 		}
-		server.Log(server.LogLevelInfo, "create table success "+tablename)
+		server.Log.Info("create table success " + tablename)
 	}
 	return nil
 }
@@ -52,12 +52,12 @@ func createTables() error {
 func Create() {
 	err := createDatabase()
 	if err != nil {
-		server.Log(server.LogLevelError, "create databases fail")
+		server.Log.Error("create databases fail")
 		return
 	}
 	err = createTables()
 	if err != nil {
-		server.Log(server.LogLevelError, "create tables fail")
+		server.Log.Error("create tables fail")
 		return
 	}
 }

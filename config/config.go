@@ -7,6 +7,9 @@ import (
 )
 
 type ConfigType struct {
+	App struct {
+		LogPath string `yaml:"log_path"`
+	} `yaml:"app"`
 	Redis struct {
 		Host     string `yaml:"host"`
 		Port     string `yaml:"port"`
