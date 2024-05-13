@@ -1,8 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"gostock/config"
+	"gostock/data/datainit"
+	"gostock/report"
 	"gostock/server"
+	"os"
 )
 
 func main() {
@@ -10,11 +14,25 @@ func main() {
 	server.InitRedis()
 	server.InitMysql()
 
-	//datainit.BatchIncrKline()
-	//strategy.Cyb()
+	params := os.Args
+	if len(params) > 1 {
+		serverType := params[1]
+		route(serverType)
+		return
+	}
 
-	//report.Real()
+	fmt.Printf("%s\t:\t%s\n", "report:real", "this is real report")
+	fmt.Printf("%s\t:\t%s\n", "datainit:batchincr", "every day batch incr update kline")
 
-	//datainit.InitKline(model.StockInfoModel_TypeEtf, "515790", "SH", config.Data.Xueqiu.InitNum)
+}
 
+func route(serverType string) {
+	switch serverType {
+	case "report:real":
+		report.Real()
+	case "datainit:batchincr":
+		datainit.BatchIncrKline()
+	default:
+		fmt.Println("go stock!!")
+	}
 }
