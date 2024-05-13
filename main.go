@@ -29,6 +29,7 @@ func main() {
 
 func route(serverType string) {
 	switch serverType {
+
 	case "migrate:db":
 		ddl.Create()
 	case "migrate:stock":
@@ -36,11 +37,14 @@ func route(serverType string) {
 	case "migrate:kline":
 		datainit.BatchInitKline()
 
+		// report
 	case "report:real":
 		report.Real()
-	case "datainit:batchincr":
+
+		//daily task
+	case "daily:kline":
 		datainit.BatchIncrKline()
 	default:
-		fmt.Println("go stock!!")
+		fmt.Println("go stock")
 	}
 }
