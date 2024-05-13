@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gostock/config"
 	"gostock/data/datainit"
+	"gostock/data/ddl"
 	"gostock/report"
 	"gostock/server"
 	"os"
@@ -28,6 +29,13 @@ func main() {
 
 func route(serverType string) {
 	switch serverType {
+	case "migrate:db":
+		ddl.Create()
+	case "migrate:stock":
+		datainit.InitStockInfo()
+	case "migrate:kline":
+		datainit.BatchInitKline()
+
 	case "report:real":
 		report.Real()
 	case "datainit:batchincr":
