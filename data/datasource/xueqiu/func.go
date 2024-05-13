@@ -2,6 +2,7 @@ package xueqiu
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"gostock/config"
 	"io"
@@ -81,6 +82,30 @@ func StockAll() ([]*StockCN, error) {
 		stockCNList = append(stockCNList, stockCN)
 	}
 	return stockCNList, nil
+}
+
+func Quote(symbol string) (*QuoteResponse, error) {
+	quoteResponse := new(QuoteResponse)
+
+	api := "http://stock.xueqiu.com/v5/stock/quote.json"
+
+	var uri url.URL
+	param := uri.Query()
+	param.Add("extend", "detail")
+	param.Add("symbol", symbol)
+	queryStr := param.Encode()
+	url := fmt.Sprintf("%s?%s", api, queryStr)
+
+	responseStr := request(url)
+	if responseStr == "" {
+		return quoteResponse, errors.New("resp is empty")
+	}
+
+	err := json.Unmarshal([]byte(responseStr), &quoteResponse)
+	if err != nil {
+		return quoteResponse, err
+	}
+	return quoteResponse, nil
 }
 
 // request send http request

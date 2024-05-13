@@ -50,6 +50,9 @@ func BatchInitKline() {
 		return
 	}
 	for key, stockInfoRecord := range stockInfoRecords {
+		if key < 4340 {
+			continue
+		}
 		InitKline(stockInfoRecord.Type, stockInfoRecord.Code, stockInfoRecord.Market, config.Data.Xueqiu.InitNum)
 		server.Log.Info(fmt.Sprintf("init kline key=%d code=%s", key, stockInfoRecord.Code))
 	}

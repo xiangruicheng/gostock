@@ -60,5 +60,5 @@ func InitConfig() {
 	if err != nil {
 		log.Fatalf("datainit config Error parsing YAML: %v", err)
 	}
-	log.Println("datainit config success")
+	//log.Println("datainit config success")
 }

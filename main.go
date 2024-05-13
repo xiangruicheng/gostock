@@ -3,7 +3,6 @@ package main
 import (
 	"gostock/config"
 	"gostock/server"
-	"gostock/strategy"
 )
 
 func main() {
@@ -11,7 +10,11 @@ func main() {
 	server.InitRedis()
 	server.InitMysql()
 
-	strategy.Cyb()
+	//datainit.BatchIncrKline()
+	//strategy.Cyb()
+
+	//report.Real()
+
 	//datainit.InitKline(model.StockInfoModel_TypeEtf, "515790", "SH", config.Data.Xueqiu.InitNum)
 
 }

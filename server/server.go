@@ -37,7 +37,7 @@ func InitMysql() {
 	db.SetMaxOpenConns(1000)
 
 	MysqlClient = db
-	log.Println("datainit MysqlClient success")
+	//log.Println("datainit MysqlClient success")
 }
 
 // InitRedis 初始化Redis客户端
@@ -53,5 +53,5 @@ func InitRedis() {
 		log.Println("redis datainit fail")
 		return
 	}
-	log.Println("datainit RedisClient success")
+	//log.Println("datainit RedisClient success")
 }
