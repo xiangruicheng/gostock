@@ -18,10 +18,13 @@ func Real() {
 		tag := item[0]
 		symbol := item[1]
 		quote, _ := xueqiu.Quote(symbol)
+		currentColor := ""
 		if quote.Data.Quote.Chg > 0 {
-			color.Red("%10s|%10f|%10f|%10f|\n", tag, quote.Data.Quote.Current, quote.Data.Quote.Percent, quote.Data.Quote.Chg)
+			currentColor = color.RedString(fmt.Sprintf("%10f", quote.Data.Quote.Current))
 		} else {
-			color.Green("%10s|%10f|%10f|%10f|\n", tag, quote.Data.Quote.Current, quote.Data.Quote.Percent, quote.Data.Quote.Chg)
+			currentColor = color.GreenString(fmt.Sprintf("%10f", quote.Data.Quote.Current))
 		}
+		fmt.Printf("%10s|%s|%10f|%10f|\n", tag, currentColor, quote.Data.Quote.Percent, quote.Data.Quote.Chg)
+
 	}
 }
