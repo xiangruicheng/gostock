@@ -7,8 +7,9 @@ import (
 )
 
 var RealPeportConfig = [][]string{
-	{"gf", "SH515790"},
-	{"cyb", "SZ159915"},
+	{"GF", "SH515790"},
+	{"CYB", "SZ159915"},
+	{"JG", "SH512660"},
 }
 
 func Real() {
@@ -21,10 +22,11 @@ func Real() {
 		currentColor := ""
 		if quote.Data.Quote.Chg > 0 {
 			currentColor = color.RedString(fmt.Sprintf("%10f", quote.Data.Quote.Current))
-		} else {
+		} else if quote.Data.Quote.Chg < 0 {
 			currentColor = color.GreenString(fmt.Sprintf("%10f", quote.Data.Quote.Current))
+		} else {
+			currentColor = fmt.Sprintf("%10f", quote.Data.Quote.Current)
 		}
 		fmt.Printf("%10s|%s|%10f|%10f|\n", tag, currentColor, quote.Data.Quote.Percent, quote.Data.Quote.Chg)
-
 	}
 }
