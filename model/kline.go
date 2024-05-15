@@ -128,3 +128,33 @@ func (model *KlineModel) GetByTypeCodeDate(typeValue int64, code string, min str
 	}
 	return klineRecords, nil
 }
+
+func (model *KlineModel) GetIndexLast(code string) (*KlineRecord, error) {
+	sql := "SELECT id,type,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where `type`=2 and code=? order by `date` desc limit 1"
+	rows, err := server.MysqlClient.Query(sql, code)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	klineRecord := new(KlineRecord)
+
+	if rows.Next() {
+		err = rows.Scan(&klineRecord.Id,
+			&klineRecord.Type,
+			&klineRecord.Code,
+			&klineRecord.Date,
+			&klineRecord.Volume,
+			&klineRecord.Open,
+			&klineRecord.High,
+			&klineRecord.Low,
+			&klineRecord.Close,
+			&klineRecord.Chg,
+			&klineRecord.Percent,
+			&klineRecord.CTime,
+			&klineRecord.UTime)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return klineRecord, nil
+}

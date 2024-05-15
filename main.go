@@ -40,6 +40,8 @@ func route(serverType string) {
 		// report
 	case "report:real":
 		report.Real()
+	case "report:day":
+		report.Day()
 
 		//daily task
 	case "daily:kline":
