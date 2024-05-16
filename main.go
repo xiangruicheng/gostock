@@ -7,6 +7,7 @@ import (
 	"gostock/data/ddl"
 	"gostock/report"
 	"gostock/server"
+	"gostock/strategy"
 	"os"
 )
 
@@ -22,6 +23,7 @@ func main() {
 		return
 	}
 
+	strategy.Cyb()
 }
 
 func route(serverType string) {

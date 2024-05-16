@@ -33,7 +33,7 @@ func Real() {
 
 func Day() {
 	config := []string{
-		"SH000001", "SZ399001",
+		"SH1A0001", "SZ399001",
 	}
 	fmt.Printf("%10s|%10s|%10s|%10s|%10s|\n", "TAG", "PRICE", "PERCENT", "CHG", "AMOUNT")
 	fmt.Printf("%10s|%10s|%10s|%10s|%10s|\n", "----------", "----------", "----------", "----------", "----------")
