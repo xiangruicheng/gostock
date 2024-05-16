@@ -22,7 +22,6 @@ func main() {
 		return
 	}
 
-	datainit.InitKline("1A0001", "SH", 1000)
 }
 
 func route(serverType string) {
