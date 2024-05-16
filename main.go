@@ -22,9 +22,7 @@ func main() {
 		return
 	}
 
-	fmt.Printf("%s\t:\t%s\n", "report:real", "this is real report")
-	fmt.Printf("%s\t:\t%s\n", "datainit:batchincr", "every day batch incr update kline")
-
+	datainit.InitKline("1A0001", "SH", 1000)
 }
 
 func route(serverType string) {

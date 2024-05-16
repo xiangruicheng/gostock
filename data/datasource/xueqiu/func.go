@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -110,6 +111,7 @@ func Quote(symbol string) (*QuoteResponse, error) {
 
 // request send http request
 func request(url string) string {
+	url = strings.Replace(url, "SH1A0001", "SH000001", 1)
 	client := &http.Client{}
 	reqest, err := http.NewRequest("GET", url, nil)
 	if err != nil {

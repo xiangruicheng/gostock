@@ -8,7 +8,6 @@ import (
 
 type KlineRecord struct {
 	Id      int64   `json:"id"`
-	Type    int64   `json:"type"`
 	Code    string  `json:"code"`
 	Date    string  `json:"date"`
 	Amount  float64 `json:"amount"`
@@ -28,7 +27,7 @@ type KlineModel struct {
 
 // GetByCode Get by code
 func (model *KlineModel) GetByCode(code string) ([]*KlineRecord, error) {
-	sql := "SELECT id,type,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where code=?"
+	sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where code=?"
 	rows, err := server.MysqlClient.Query(sql, code)
 	defer rows.Close()
 	if err != nil {
@@ -39,7 +38,6 @@ func (model *KlineModel) GetByCode(code string) ([]*KlineRecord, error) {
 	for rows.Next() {
 		klineRecord := new(KlineRecord)
 		err = rows.Scan(&klineRecord.Id,
-			&klineRecord.Type,
 			&klineRecord.Code,
 			&klineRecord.Date,
 			&klineRecord.Volume,
@@ -63,8 +61,8 @@ func (model *KlineModel) GetByCode(code string) ([]*KlineRecord, error) {
 func (model *KlineModel) Insert(record *KlineRecord) (int64, error) {
 	var id int64 = 0
 
-	sql := "INSERT IGNORE INTO `kline` (`type`,`code`, `date`, `volume`, `amount`, `open`, `high`, `low`, `close`, `chg`, `percent`, `c_time`, `u_time`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
-	res, err := server.MysqlClient.Exec(sql, record.Type, record.Code, record.Date, record.Volume, record.Amount, record.Open, record.High, record.Low, record.Close, record.Chg, record.Percent, record.CTime, record.UTime)
+	sql := "INSERT IGNORE INTO `kline` (`code`, `date`, `volume`, `amount`, `open`, `high`, `low`, `close`, `chg`, `percent`, `c_time`, `u_time`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+	res, err := server.MysqlClient.Exec(sql, record.Code, record.Date, record.Volume, record.Amount, record.Open, record.High, record.Low, record.Close, record.Chg, record.Percent, record.CTime, record.UTime)
 	if err != nil {
 		return id, err
 	}
@@ -80,9 +78,9 @@ func (model *KlineModel) Insert(record *KlineRecord) (int64, error) {
 func (model *KlineModel) BatchInsert(records []*KlineRecord) (int64, error) {
 	var rowsAffected int64 = 0
 
-	sql := "INSERT IGNORE INTO `kline` (`type`,`code`, `date`, `volume`, `amount`, `open`, `high`, `low`, `close`, `chg`, `percent`, `c_time`, `u_time`) VALUES "
+	sql := "INSERT IGNORE INTO `kline` (`code`, `date`, `volume`, `amount`, `open`, `high`, `low`, `close`, `chg`, `percent`, `c_time`, `u_time`) VALUES "
 	for _, record := range records {
-		sql += fmt.Sprintf(" (%d,'%s', '%s', %f, %f, %f, %f, %f, %f, %f, %f, %d, %d),", record.Type, record.Code, record.Date, record.Volume, record.Amount, record.Open, record.High, record.Low, record.Close, record.Chg, record.Percent, record.CTime, record.UTime)
+		sql += fmt.Sprintf(" ('%s', '%s', %f, %f, %f, %f, %f, %f, %f, %f, %d, %d),", record.Code, record.Date, record.Volume, record.Amount, record.Open, record.High, record.Low, record.Close, record.Chg, record.Percent, record.CTime, record.UTime)
 	}
 	sql = strings.TrimRight(sql, ",")
 	res, err := server.MysqlClient.Exec(sql)
@@ -97,9 +95,9 @@ func (model *KlineModel) BatchInsert(records []*KlineRecord) (int64, error) {
 	return rowsAffected, nil
 }
 
-func (model *KlineModel) GetByTypeCodeDate(typeValue int64, code string, min string, max string) ([]*KlineRecord, error) {
-	sql := "SELECT id,type,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where `type`=? and code=? and date>? and date<?"
-	rows, err := server.MysqlClient.Query(sql, typeValue, code, min, max)
+func (model *KlineModel) GetByTypeCodeDate(code string, min string, max string) ([]*KlineRecord, error) {
+	sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where code=? and date>? and date<?"
+	rows, err := server.MysqlClient.Query(sql, code, min, max)
 	defer rows.Close()
 	if err != nil {
 		return nil, err
@@ -109,7 +107,6 @@ func (model *KlineModel) GetByTypeCodeDate(typeValue int64, code string, min str
 	for rows.Next() {
 		klineRecord := new(KlineRecord)
 		err = rows.Scan(&klineRecord.Id,
-			&klineRecord.Type,
 			&klineRecord.Code,
 			&klineRecord.Date,
 			&klineRecord.Volume,
@@ -130,7 +127,7 @@ func (model *KlineModel) GetByTypeCodeDate(typeValue int64, code string, min str
 }
 
 func (model *KlineModel) GetIndexLast(code string) (*KlineRecord, error) {
-	sql := "SELECT id,type,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where `type`=2 and code=? order by `date` desc limit 1"
+	sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where code=? order by `date` desc limit 1"
 	rows, err := server.MysqlClient.Query(sql, code)
 	defer rows.Close()
 	if err != nil {
@@ -140,7 +137,6 @@ func (model *KlineModel) GetIndexLast(code string) (*KlineRecord, error) {
 
 	if rows.Next() {
 		err = rows.Scan(&klineRecord.Id,
-			&klineRecord.Type,
 			&klineRecord.Code,
 			&klineRecord.Date,
 			&klineRecord.Volume,

@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func InitKline(stockInfoType int64, code string, market string, days int64) int64 {
+func InitKline(code string, market string, days int64) int64 {
 	symbol := market + code
 	klines, err := xueqiu.KlineList(symbol, days)
 	if err != nil {
@@ -20,7 +20,6 @@ func InitKline(stockInfoType int64, code string, market string, days int64) int6
 	klineRecords := []*model.KlineRecord{}
 	for _, kline := range klines {
 		klineRecord := new(model.KlineRecord)
-		klineRecord.Type = stockInfoType
 		klineRecord.Code = code
 		klineRecord.Date = util.FormatDate(kline.Time)
 		klineRecord.Volume = kline.Volume
@@ -50,10 +49,7 @@ func BatchInitKline() {
 		return
 	}
 	for key, stockInfoRecord := range stockInfoRecords {
-		if key < 4340 {
-			continue
-		}
-		InitKline(stockInfoRecord.Type, stockInfoRecord.Code, stockInfoRecord.Market, config.Data.Xueqiu.InitNum)
+		InitKline(stockInfoRecord.Code, stockInfoRecord.Market, config.Data.Xueqiu.InitNum)
 		server.Log.Info(fmt.Sprintf("init kline key=%d code=%s", key, stockInfoRecord.Code))
 	}
 }
@@ -65,7 +61,7 @@ func BatchIncrKline() {
 		return
 	}
 	for key, stockInfoRecord := range stockInfoRecords {
-		InitKline(stockInfoRecord.Type, stockInfoRecord.Code, stockInfoRecord.Market, config.Data.Xueqiu.IncrNum)
+		InitKline(stockInfoRecord.Code, stockInfoRecord.Market, config.Data.Xueqiu.IncrNum)
 		server.Log.Error(fmt.Sprintf("incr kline key=%d code=%s", key, stockInfoRecord.Code))
 	}
 }

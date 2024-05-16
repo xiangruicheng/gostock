@@ -10,9 +10,9 @@ import (
 )
 
 func InitStockInfo() {
+	initStockType()
 	initIndexType()
 	initEtfType()
-	initStockType()
 }
 
 func initIndexType() {
@@ -22,7 +22,6 @@ func initIndexType() {
 		stockInfoRecord.Code = etf.Code
 		stockInfoRecord.Name = etf.Name
 		stockInfoRecord.Market = market
-		stockInfoRecord.Type = model.StockInfoModel_TypeIndex
 		stockInfoRecord.CTime = time.Now().Unix()
 		stockInfoRecord.UTime = time.Now().Unix()
 		new(model.StockInfoModel).Insert(stockInfoRecord)
@@ -36,7 +35,6 @@ func initEtfType() {
 		stockInfoRecord.Code = etf.Code
 		stockInfoRecord.Name = etf.Name
 		stockInfoRecord.Market = market
-		stockInfoRecord.Type = model.StockInfoModel_TypeEtf
 		stockInfoRecord.CTime = time.Now().Unix()
 		stockInfoRecord.UTime = time.Now().Unix()
 		new(model.StockInfoModel).Insert(stockInfoRecord)
@@ -55,7 +53,6 @@ func initStockType() {
 		stockInfoRecord.Code = strings.TrimLeft(stockCN.Code, market)
 		stockInfoRecord.Name = stockCN.Name
 		stockInfoRecord.Market = market
-		stockInfoRecord.Type = model.StockInfoModel_TypeStock
 		stockInfoRecord.CTime = time.Now().Unix()
 		stockInfoRecord.UTime = time.Now().Unix()
 		new(model.StockInfoModel).Insert(stockInfoRecord)
