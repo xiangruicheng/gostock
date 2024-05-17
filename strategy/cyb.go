@@ -32,7 +32,7 @@ func Cyb() {
 
 // cybStrategy1
 func cybStrategy1(min string, max string) {
-	klines, _ := new(model.KlineModel).GetByTypeCodeDate("159915", min, max)
+	klines, _ := new(model.KlineModel).GetByCodeRangeDate("159915", "20100101", "20250101")
 	var downDyas int
 	var nextDayPercentTotal float64
 

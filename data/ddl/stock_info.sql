@@ -9,5 +9,5 @@ CREATE TABLE IF NOT EXISTS `stock_info` (
   `c_time` int unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `u_time` int unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `uniq_code_type` (`code`) USING BTREE
+  UNIQUE KEY `uniq_code` (`code`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='股票信息';

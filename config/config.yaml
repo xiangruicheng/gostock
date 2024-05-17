@@ -20,6 +20,7 @@ ddl:
   tables:
     - kline
     - stock_info
+    - macd
 
 xueqiu:
   init-num: 3000

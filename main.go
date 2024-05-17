@@ -5,9 +5,9 @@ import (
 	"gostock/config"
 	"gostock/data/datainit"
 	"gostock/data/ddl"
+	"gostock/data/indicator"
 	"gostock/report"
 	"gostock/server"
-	"gostock/strategy"
 	"os"
 )
 
@@ -23,7 +23,6 @@ func main() {
 		return
 	}
 
-	strategy.Cyb()
 }
 
 func route(serverType string) {
@@ -45,6 +44,8 @@ func route(serverType string) {
 		//daily task
 	case "daily:kline":
 		datainit.BatchIncrKline()
+	case "daily:macd":
+		indicator.MacdBatchRun()
 	default:
 		fmt.Println("go stock")
 	}

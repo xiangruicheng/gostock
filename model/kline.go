@@ -95,7 +95,7 @@ func (model *KlineModel) BatchInsert(records []*KlineRecord) (int64, error) {
 	return rowsAffected, nil
 }
 
-func (model *KlineModel) GetByTypeCodeDate(code string, min string, max string) ([]*KlineRecord, error) {
+func (model *KlineModel) GetByCodeRangeDate(code string, min string, max string) ([]*KlineRecord, error) {
 	sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where code=? and date>? and date<?"
 	rows, err := server.MysqlClient.Query(sql, code, min, max)
 	defer rows.Close()
@@ -126,16 +126,17 @@ func (model *KlineModel) GetByTypeCodeDate(code string, min string, max string) 
 	return klineRecords, nil
 }
 
-func (model *KlineModel) GetIndexLast(code string) (*KlineRecord, error) {
-	sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where code=? order by `date` desc limit 1"
-	rows, err := server.MysqlClient.Query(sql, code)
+func (model *KlineModel) GetByCodeGtDate(code string, min string) ([]*KlineRecord, error) {
+	sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where code=? and date>?"
+	rows, err := server.MysqlClient.Query(sql, code, min)
 	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
-	klineRecord := new(KlineRecord)
+	klineRecords := []*KlineRecord{}
 
-	if rows.Next() {
+	for rows.Next() {
+		klineRecord := new(KlineRecord)
 		err = rows.Scan(&klineRecord.Id,
 			&klineRecord.Code,
 			&klineRecord.Date,
@@ -151,6 +152,7 @@ func (model *KlineModel) GetIndexLast(code string) (*KlineRecord, error) {
 		if err != nil {
 			return nil, err
 		}
+		klineRecords = append(klineRecords, klineRecord)
 	}
-	return klineRecord, nil
+	return klineRecords, nil
 }
