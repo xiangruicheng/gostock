@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"gostock/config"
 	"gostock/data/datainit"
 	"gostock/data/ddl"
@@ -9,44 +8,35 @@ import (
 	"gostock/report"
 	"gostock/server"
 	"os"
+	"reflect"
 )
 
 func main() {
 	config.InitConfig()
 	server.InitRedis()
 	server.InitMysql()
-
-	params := os.Args
-	if len(params) > 1 {
-		serverType := params[1]
-		route(serverType)
-		return
-	}
+	CommandInit()
 
 }
 
-func route(serverType string) {
-	switch serverType {
+var commandConfig = map[string]any{
+	"migrate:db":    ddl.Create,
+	"migrate:stock": datainit.InitStockInfo,
+	"migrate:kline": datainit.BatchInitKline,
+	"report:real":   report.Real,
+	"report:day":    report.Day,
+	"daily:kline":   datainit.BatchIncrKline,
+	"daily:macd":    indicator.MacdBatchRun,
+}
 
-	case "migrate:db":
-		ddl.Create()
-	case "migrate:stock":
-		datainit.InitStockInfo()
-	case "migrate:kline":
-		datainit.BatchInitKline()
-
-		// report
-	case "report:real":
-		report.Real()
-	case "report:day":
-		report.Day()
-
-		//daily task
-	case "daily:kline":
-		datainit.BatchIncrKline()
-	case "daily:macd":
-		indicator.MacdBatchRun()
-	default:
-		fmt.Println("go stock")
+func CommandInit() {
+	params := os.Args
+	if len(params) > 1 {
+		serverType := params[1]
+		method := commandConfig[serverType]
+		if method != nil {
+			m := reflect.ValueOf(method)
+			m.Call(nil)
+		}
 	}
 }

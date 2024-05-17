@@ -12,6 +12,7 @@ var RealPeportConfig = [][]string{
 	{"JG", "SH512660"},
 }
 
+// this is real
 func Real() {
 	fmt.Printf("%10s|%10s|%10s|%10s|\n", "TAG", "PRICE", "PERCENT", "CHG")
 	fmt.Printf("%10s|%10s|%10s|%10s|\n", "----------", "----------", "----------", "----------")
