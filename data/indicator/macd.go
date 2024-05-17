@@ -30,7 +30,7 @@ func (s *Macd) Run(code string) {
 	hisMacdDatas, _ := new(model.MacdModel).GetByCode(code)
 	if len(hisMacdDatas) == 0 {
 		newBulidTag = true
-		beginDate = "20160101"
+		beginDate = "20030101"
 	} else {
 		newBulidTag = false
 		lastRow = hisMacdDatas[len(hisMacdDatas)-1]

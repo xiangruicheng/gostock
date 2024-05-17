@@ -7,6 +7,7 @@ import (
 	"gostock/data/indicator"
 	"gostock/report"
 	"gostock/server"
+	"gostock/strategy"
 	"os"
 	"reflect"
 )
@@ -16,6 +17,8 @@ func main() {
 	server.InitRedis()
 	server.InitMysql()
 	CommandInit()
+
+	strategy.MacdStragegy()
 }
 
 var commandConfig = map[string]any{
