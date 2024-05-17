@@ -16,7 +16,6 @@ func main() {
 	server.InitRedis()
 	server.InitMysql()
 	CommandInit()
-
 }
 
 var commandConfig = map[string]any{
