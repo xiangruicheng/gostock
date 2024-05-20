@@ -16,7 +16,12 @@ func main() {
 	config.InitConfig()
 	server.InitRedis()
 	server.InitMysql()
-	CommandInit()
+
+	// exec command
+	isCommand := CommandInit()
+	if isCommand {
+		return
+	}
 
 	strategy.MacdStragegy()
 }
@@ -31,7 +36,7 @@ var commandConfig = map[string]any{
 	"daily:macd":    indicator.MacdBatchRun,
 }
 
-func CommandInit() {
+func CommandInit() bool {
 	params := os.Args
 	if len(params) > 1 {
 		serverType := params[1]
@@ -39,6 +44,8 @@ func CommandInit() {
 		if method != nil {
 			m := reflect.ValueOf(method)
 			m.Call(nil)
+			return true
 		}
 	}
+	return false
 }
