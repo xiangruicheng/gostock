@@ -23,6 +23,8 @@ func main() {
 		return
 	}
 
+	//r := strategy.MacdOne("000001")
+	//strategy.PrintStrategyResult(r)
 	strategy.MacdStragegy()
 }
 
