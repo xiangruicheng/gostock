@@ -29,13 +29,14 @@ func main() {
 }
 
 var commandConfig = map[string]any{
-	"migrate:db":    ddl.Create,
-	"migrate:stock": datainit.InitStockInfo,
-	"migrate:kline": datainit.BatchInitKline,
-	"report:real":   report.Real,
-	"report:day":    report.Day,
-	"daily:kline":   datainit.BatchIncrKline,
-	"daily:macd":    indicator.MacdBatchRun,
+	"migrate:db":     ddl.Create,
+	"migrate:stock":  datainit.InitStockInfo,
+	"migrate:kline":  datainit.BatchInitKline,
+	"report:real":    report.Real,
+	"report:day":     report.Day,
+	"daily:kline":    datainit.BatchIncrKline,
+	"daily:macd":     indicator.MacdBatchRun,
+	"daily:baseinfo": datainit.BatchUpdateStockBaseInfo,
 }
 
 func CommandInit() bool {

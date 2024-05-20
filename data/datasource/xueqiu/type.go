@@ -42,13 +42,13 @@ type QuoteResponse struct {
 			ExpirationDate     interface{} `json:"expiration_date"`
 			Percent            float64     `json:"percent"`
 			TickSize           float64     `json:"tick_size"`
-			FloatShares        interface{} `json:"float_shares"`
+			FloatShares        float64     `json:"float_shares"`
 			LimitDown          float64     `json:"limit_down"`
 			Amplitude          float64     `json:"amplitude"`
 			Current            float64     `json:"current"`
 			High               float64     `json:"high"`
 			CurrentYearPercent float64     `json:"current_year_percent"`
-			FloatMarketCapital interface{} `json:"float_market_capital"`
+			FloatMarketCapital float64     `json:"float_market_capital"`
 			IssueDate          int64       `json:"issue_date"`
 			Low                float64     `json:"low"`
 			SubType            string      `json:"sub_type"`
@@ -62,7 +62,7 @@ type QuoteResponse struct {
 			Amount             float64     `json:"amount"`
 			Chg                float64     `json:"chg"`
 			LastClose          float64     `json:"last_close"`
-			Volume             int         `json:"volume"`
+			Volume             float64     `json:"volume"`
 			VolumeRatio        interface{} `json:"volume_ratio"`
 			LimitUp            float64     `json:"limit_up"`
 			TurnoverRate       interface{} `json:"turnover_rate"`
@@ -72,7 +72,7 @@ type QuoteResponse struct {
 			Exchange           string      `json:"exchange"`
 			UnitNav            float64     `json:"unit_nav"`
 			Time               int64       `json:"time"`
-			TotalShares        int64       `json:"total_shares"`
+			TotalShares        float64     `json:"total_shares"`
 			Open               float64     `json:"open"`
 			Status             int         `json:"status"`
 		} `json:"quote"`
