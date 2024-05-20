@@ -22,20 +22,22 @@ func main() {
 		return
 	}
 
-	//r := strategy.MacdOne("000001")
-	//strategy.PrintStrategyResult(r)
-	//strategy.MacdStragegy()
+	datainit.UpdateStockPeople("000001")
+
 }
 
 var commandConfig = map[string]any{
-	"migrate:db":    ddl.Create,
-	"migrate:stock": datainit.InitStockInfo,
-	"migrate:kline": datainit.BatchInitKline,
-	"report:real":   report.Real,
-	"report:day":    report.Day,
-	"daily:kline":   datainit.BatchIncrKline,
-	"daily:macd":    indicator.MacdBatchRun,
-	"daily:quote":   datainit.BatchUpdateStockQuote,
+	"migrate:db":     ddl.Create,
+	"migrate:stock":  datainit.InitStockInfo,
+	"migrate:kline":  datainit.BatchInitKline,
+	"migrate:people": datainit.BatchUpdateStockPeople,
+
+	"report:real": report.Real,
+	"report:day":  report.Day,
+
+	"daily:kline": datainit.BatchIncrKline,
+	"daily:macd":  indicator.MacdBatchRun,
+	"daily:quote": datainit.BatchUpdateStockQuote,
 }
 
 func CommandInit() bool {
