@@ -101,7 +101,6 @@ func Quote(symbol string) (*QuoteResponse, error) {
 	if responseStr == "" {
 		return quoteResponse, errors.New("resp is empty")
 	}
-
 	err := json.Unmarshal([]byte(responseStr), &quoteResponse)
 	if err != nil {
 		return quoteResponse, err

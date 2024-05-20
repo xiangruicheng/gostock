@@ -7,7 +7,6 @@ import (
 	"gostock/data/indicator"
 	"gostock/report"
 	"gostock/server"
-	"gostock/strategy"
 	"os"
 	"reflect"
 )
@@ -25,7 +24,7 @@ func main() {
 
 	//r := strategy.MacdOne("000001")
 	//strategy.PrintStrategyResult(r)
-	strategy.MacdStragegy()
+	//strategy.MacdStragegy()
 }
 
 var commandConfig = map[string]any{
@@ -36,7 +35,7 @@ var commandConfig = map[string]any{
 	"report:day":     report.Day,
 	"daily:kline":    datainit.BatchIncrKline,
 	"daily:macd":     indicator.MacdBatchRun,
-	"daily:baseinfo": datainit.BatchUpdateStockBaseInfo,
+	"daily:baseinfo": datainit.BatchUpdateStockQuote,
 }
 
 func CommandInit() bool {

@@ -20,75 +20,6 @@ type StockAllResponse struct {
 	} `json:"data"`
 }
 
-type QuoteResponse struct {
-	Data struct {
-		Market struct {
-			StatusId     int         `json:"status_id"`
-			Region       string      `json:"region"`
-			Status       string      `json:"status"`
-			TimeZone     string      `json:"time_zone"`
-			TimeZoneDesc interface{} `json:"time_zone_desc"`
-			DelayTag     int         `json:"delay_tag"`
-		} `json:"market"`
-		Quote struct {
-			Bol                string      `json:"bol"`
-			Code               string      `json:"code"`
-			AccUnitNav         float64     `json:"acc_unit_nav"`
-			High52W            float64     `json:"high52w"`
-			NavDate            int64       `json:"nav_date"`
-			AvgPrice           float64     `json:"avg_price"`
-			Delayed            int         `json:"delayed"`
-			Type               int         `json:"type"`
-			ExpirationDate     interface{} `json:"expiration_date"`
-			Percent            float64     `json:"percent"`
-			TickSize           float64     `json:"tick_size"`
-			FloatShares        float64     `json:"float_shares"`
-			LimitDown          float64     `json:"limit_down"`
-			Amplitude          float64     `json:"amplitude"`
-			Current            float64     `json:"current"`
-			High               float64     `json:"high"`
-			CurrentYearPercent float64     `json:"current_year_percent"`
-			FloatMarketCapital float64     `json:"float_market_capital"`
-			IssueDate          int64       `json:"issue_date"`
-			Low                float64     `json:"low"`
-			SubType            string      `json:"sub_type"`
-			MarketCapital      float64     `json:"market_capital"`
-			Currency           string      `json:"currency"`
-			LotSize            int         `json:"lot_size"`
-			LockSet            interface{} `json:"lock_set"`
-			Iopv               float64     `json:"iopv"`
-			Timestamp          int64       `json:"timestamp"`
-			FoundDate          int64       `json:"found_date"`
-			Amount             float64     `json:"amount"`
-			Chg                float64     `json:"chg"`
-			LastClose          float64     `json:"last_close"`
-			Volume             float64     `json:"volume"`
-			VolumeRatio        interface{} `json:"volume_ratio"`
-			LimitUp            float64     `json:"limit_up"`
-			TurnoverRate       interface{} `json:"turnover_rate"`
-			Low52W             float64     `json:"low52w"`
-			Name               string      `json:"name"`
-			PremmRate          float64     `json:"premm_rate"`
-			Exchange           string      `json:"exchange"`
-			UnitNav            float64     `json:"unit_nav"`
-			Time               int64       `json:"time"`
-			TotalShares        float64     `json:"total_shares"`
-			Open               float64     `json:"open"`
-			Status             int         `json:"status"`
-		} `json:"quote"`
-		Others struct {
-			PankouRatio float64 `json:"pankou_ratio"`
-			CybSwitch   bool    `json:"cyb_switch"`
-		} `json:"others"`
-		Tags []struct {
-			Description string `json:"description"`
-			Value       int    `json:"value"`
-		} `json:"tags"`
-	} `json:"data"`
-	ErrorCode        int    `json:"error_code"`
-	ErrorDescription string `json:"error_description"`
-}
-
 type Kline struct {
 	Time    float64 `json:"time"`
 	Volume  float64 `json:"volume"`
@@ -104,4 +35,92 @@ type Kline struct {
 type StockCN struct {
 	Code string `json:"code"`
 	Name string `json:"name"`
+}
+
+type QuoteResponse struct {
+	Data struct {
+		Market struct {
+			StatusId     int         `json:"status_id"`
+			Region       string      `json:"region"`
+			Status       string      `json:"status"`
+			TimeZone     string      `json:"time_zone"`
+			TimeZoneDesc interface{} `json:"time_zone_desc"`
+			DelayTag     int         `json:"delay_tag"`
+		} `json:"market"`
+		Quote struct {
+			CurrentExt               interface{} `json:"current_ext"`
+			Symbol                   string      `json:"symbol"`
+			VolumeExt                interface{} `json:"volume_ext"`
+			High52W                  float64     `json:"high52w"`
+			Delayed                  int         `json:"delayed"`
+			Type                     int         `json:"type"`
+			TickSize                 float64     `json:"tick_size"`
+			FloatShares              float64     `json:"float_shares"`
+			LimitDown                float64     `json:"limit_down"`
+			NoProfit                 string      `json:"no_profit"`
+			High                     float64     `json:"high"`
+			FloatMarketCapital       float64     `json:"float_market_capital"`
+			TimestampExt             interface{} `json:"timestamp_ext"`
+			LotSize                  int         `json:"lot_size"`
+			LockSet                  interface{} `json:"lock_set"`
+			WeightedVotingRights     string      `json:"weighted_voting_rights"`
+			Chg                      float64     `json:"chg"`
+			Eps                      float64     `json:"eps"`
+			LastClose                float64     `json:"last_close"`
+			ProfitFour               float64     `json:"profit_four"`
+			Volume                   float64     `json:"volume"`
+			VolumeRatio              float64     `json:"volume_ratio"`
+			ProfitForecast           float64     `json:"profit_forecast"`
+			TurnoverRate             float64     `json:"turnover_rate"`
+			Low52W                   float64     `json:"low52w"`
+			Name                     string      `json:"name"`
+			Exchange                 string      `json:"exchange"`
+			PeForecast               float64     `json:"pe_forecast"`
+			TotalShares              float64     `json:"total_shares"`
+			Status                   int         `json:"status"`
+			IsVieDesc                string      `json:"is_vie_desc"`
+			SecurityStatus           interface{} `json:"security_status"`
+			Code                     string      `json:"code"`
+			GoodwillInNetAssets      float64     `json:"goodwill_in_net_assets"`
+			AvgPrice                 float64     `json:"avg_price"`
+			Percent                  float64     `json:"percent"`
+			WeightedVotingRightsDesc string      `json:"weighted_voting_rights_desc"`
+			Amplitude                float64     `json:"amplitude"`
+			Current                  float64     `json:"current"`
+			IsVie                    string      `json:"is_vie"`
+			CurrentYearPercent       float64     `json:"current_year_percent"`
+			IssueDate                int64       `json:"issue_date"`
+			SubType                  string      `json:"sub_type"`
+			Low                      float64     `json:"low"`
+			IsRegistrationDesc       string      `json:"is_registration_desc"`
+			NoProfitDesc             string      `json:"no_profit_desc"`
+			MarketCapital            float64     `json:"market_capital"`
+			Dividend                 float64     `json:"dividend"`
+			DividendYield            float64     `json:"dividend_yield"`
+			Currency                 string      `json:"currency"`
+			Navps                    float64     `json:"navps"`
+			Profit                   float64     `json:"profit"`
+			Timestamp                int64       `json:"timestamp"`
+			PeLyr                    float64     `json:"pe_lyr"`
+			Amount                   float64     `json:"amount"`
+			PledgeRatio              float64     `json:"pledge_ratio"`
+			TradedAmountExt          interface{} `json:"traded_amount_ext"`
+			IsRegistration           string      `json:"is_registration"`
+			Pb                       float64     `json:"pb"`
+			LimitUp                  float64     `json:"limit_up"`
+			PeTtm                    float64     `json:"pe_ttm"`
+			Time                     int64       `json:"time"`
+			Open                     float64     `json:"open"`
+		} `json:"quote"`
+		Others struct {
+			PankouRatio float64 `json:"pankou_ratio"`
+			CybSwitch   bool    `json:"cyb_switch"`
+		} `json:"others"`
+		Tags []struct {
+			Description string `json:"description"`
+			Value       int    `json:"value"`
+		} `json:"tags"`
+	} `json:"data"`
+	ErrorCode        int    `json:"error_code"`
+	ErrorDescription string `json:"error_description"`
 }
