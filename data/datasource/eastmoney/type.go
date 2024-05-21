@@ -18,3 +18,32 @@ type PeopleResponse struct {
 	Message string `json:"message"`
 	Code    int    `json:"code"`
 }
+
+type Hs300Response struct {
+	Version string `json:"version"`
+	Result  struct {
+		Pages int `json:"pages"`
+		Data  []struct {
+			SECUCODE         string  `json:"SECUCODE"`
+			SECURITYCODE     string  `json:"SECURITY_CODE"`
+			TYPE             string  `json:"TYPE"`
+			SECURITYNAMEABBR string  `json:"SECURITY_NAME_ABBR"`
+			CLOSEPRICE       float64 `json:"CLOSE_PRICE"`
+			INDUSTRY         string  `json:"INDUSTRY"`
+			REGION           string  `json:"REGION"`
+			WEIGHT           float64 `json:"WEIGHT"`
+			EPS              float64 `json:"EPS"`
+			BPS              float64 `json:"BPS"`
+			ROE              float64 `json:"ROE"`
+			TOTALSHARES      float64 `json:"TOTAL_SHARES"`
+			FREESHARES       float64 `json:"FREE_SHARES"`
+			FREECAP          float64 `json:"FREE_CAP"`
+			F2               float64 `json:"f2"`
+			F3               float64 `json:"f3"`
+		} `json:"data"`
+		Count int `json:"count"`
+	} `json:"result"`
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+	Code    int    `json:"code"`
+}
