@@ -22,8 +22,9 @@ func UpdateHs300() {
 
 	codeArr := []string{}
 	for _, item := range hs300Res.Result.Data {
-		codeArr = append(codeArr, item.SECURITYCODE)
+		codeArr = append(codeArr, item.Code)
 	}
+
 	affected, err := new(model.StockInfoModel).UpdateHs300(codeArr)
 	if err != nil {
 		server.Log.Error(fmt.Sprintf("UpdateHs300 fail %s ", err.Error()))

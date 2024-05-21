@@ -8,7 +8,7 @@ import (
 )
 
 func Hs300() (*Hs300Response, error) {
-	url := "https://datacenter-web.eastmoney.com/api/data/v1/get?sortColumns=SECURITY_CODE&sortTypes=-1&pageSize=400&pageNumber=1&reportName=RPT_INDEX_TS_COMPONENT&columns=SECUCODE%2CSECURITY_CODE%2CTYPE%2CSECURITY_NAME_ABBR%2CCLOSE_PRICE%2CINDUSTRY%2CREGION%2CWEIGHT%2CEPS%2CBPS%2CROE%2CTOTAL_SHARES%2CFREE_SHARES%2CFREE_CAP&quoteColumns=f2%2Cf3&source=WEB&client=WEB&filter=(TYPE%3D%221%22)"
+	url := "https://datacenter-web.eastmoney.com/api/data/v1/get?sortColumns=SECURITY_CODE&sortTypes=-1&pageSize=400&pageNumber=1&reportName=RPT_INDEX_TS_COMPONENT&columns=SECUCODE%2CSECURITY_CODE&quoteColumns=f2%2Cf3&source=WEB&client=WEB&filter=(TYPE%3D%221%22)"
 	hs300Response := new(Hs300Response)
 	responseStr := request(url)
 	if responseStr == "" {
@@ -36,7 +36,7 @@ func People(code string) (*PeopleResponse, error) {
 }
 
 func Cyb() (*StockAllResponse, error) {
-	url := "https://45.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5000&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&dect=1&wbp2u=|0|0|0|web&fid=f3&fs=m:0+t:80&fields=fields=f12,f14"
+	url := "https://45.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5000&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&dect=1&wbp2u=|0|0|0|web&fid=f3&fs=m:0+t:80&fields=f12,f14"
 	stockAllRespons := new(StockAllResponse)
 	responseStr := request(url)
 	if responseStr == "" {
