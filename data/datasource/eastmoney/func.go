@@ -35,6 +35,30 @@ func People(code string) (*PeopleResponse, error) {
 	return peopleResponse, nil
 }
 
+func StockAll(market string) (*StockAllResponse, error) {
+	url := ""
+	if market == "SH" {
+		url = "https://45.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5000&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&dect=1&wbp2u=|0|0|0|web&fid=f3&fs=m:1+t:2,m:1+t:23&fields=f12,f14"
+	}
+	if market == "SZ" {
+		url = "https://45.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5000&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&dect=1&wbp2u=|0|0|0|web&fid=f3&fs=m:0+t:6,m:0+t:80&fields=f12,f14"
+	}
+	if url == "" {
+		return nil, errors.New("market error")
+	}
+
+	stockAllRespons := new(StockAllResponse)
+	responseStr := request(url)
+	if responseStr == "" {
+		return stockAllRespons, errors.New("resp is empty")
+	}
+	err := json.Unmarshal([]byte(responseStr), &stockAllRespons)
+	if err != nil {
+		return stockAllRespons, err
+	}
+	return stockAllRespons, nil
+}
+
 func request(url string) string {
 	client := &http.Client{}
 	reqest, err := http.NewRequest("GET", url, nil)

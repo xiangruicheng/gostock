@@ -47,3 +47,19 @@ type Hs300Response struct {
 	Message string `json:"message"`
 	Code    int    `json:"code"`
 }
+
+type StockAllResponse struct {
+	Rc     int    `json:"rc"`
+	Rt     int    `json:"rt"`
+	Svr    int64  `json:"svr"`
+	Lt     int    `json:"lt"`
+	Full   int    `json:"full"`
+	Dlmkts string `json:"dlmkts"`
+	Data   struct {
+		Total int `json:"total"`
+		Diff  []struct {
+			Code string `json:"f12"`
+			Name string `json:"f14"`
+		} `json:"diff"`
+	} `json:"data"`
+}

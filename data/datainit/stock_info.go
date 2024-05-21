@@ -4,10 +4,8 @@ import (
 	"fmt"
 	"gostock/config"
 	"gostock/data/datasource/eastmoney"
-	"gostock/data/datasource/xueqiu"
 	"gostock/model"
 	"gostock/server"
-	"strings"
 	"time"
 )
 
@@ -52,6 +50,7 @@ func initIndexType() {
 		stockInfoRecord.UTime = time.Now().Unix()
 		new(model.StockInfoModel).Insert(stockInfoRecord)
 	}
+	server.Log.Info(fmt.Sprintf("initIndexType succ"))
 }
 
 func initEtfType() {
@@ -65,22 +64,26 @@ func initEtfType() {
 		stockInfoRecord.UTime = time.Now().Unix()
 		new(model.StockInfoModel).Insert(stockInfoRecord)
 	}
+	server.Log.Info(fmt.Sprintf("initEtfType succ"))
+
 }
 
 func initStockType() {
-	stockCNList, err := xueqiu.StockAll()
-	if err != nil {
-		server.Log.Error(err.Error())
-		return
-	}
-	for _, stockCN := range stockCNList {
-		market := stockCN.Code[0:2]
-		stockInfoRecord := new(model.StockInfoRecord)
-		stockInfoRecord.Code = strings.TrimLeft(stockCN.Code, market)
-		stockInfoRecord.Name = stockCN.Name
-		stockInfoRecord.Market = market
-		stockInfoRecord.CTime = time.Now().Unix()
-		stockInfoRecord.UTime = time.Now().Unix()
-		new(model.StockInfoModel).Insert(stockInfoRecord)
+	for _, market := range []string{"SH", "SZ"} {
+		stockAll, err := eastmoney.StockAll(market)
+		if err != nil {
+			server.Log.Error(fmt.Sprintf("initStockType %s fail,%s", market, err.Error()))
+			return
+		}
+		for _, item := range stockAll.Data.Diff {
+			stockInfoRecord := new(model.StockInfoRecord)
+			stockInfoRecord.Code = item.Code
+			stockInfoRecord.Name = item.Name
+			stockInfoRecord.Market = market
+			stockInfoRecord.CTime = time.Now().Unix()
+			stockInfoRecord.UTime = time.Now().Unix()
+			new(model.StockInfoModel).Insert(stockInfoRecord)
+		}
+		server.Log.Info(fmt.Sprintf("initStockType %s succ", market))
 	}
 }
