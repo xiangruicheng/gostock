@@ -33,6 +33,25 @@ func UpdateHs300() {
 	return
 }
 
+func UpdateCyb() {
+	cybRes, err := eastmoney.Cyb()
+	if err != nil {
+		server.Log.Error(fmt.Sprintf("UpdateHs300 fail %s", err.Error()))
+		return
+	}
+	codeArr := []string{}
+	for _, item := range cybRes.Data.Diff {
+		codeArr = append(codeArr, item.Code)
+	}
+	affected, err := new(model.StockInfoModel).UpdateCyb(codeArr)
+	if err != nil {
+		server.Log.Error(fmt.Sprintf("UpdateCyb fail %s ", err.Error()))
+		return
+	}
+	server.Log.Error(fmt.Sprintf("UpdateCyb succ %d ", affected))
+	return
+}
+
 func InitStockInfo() {
 	initStockType()
 	initIndexType()

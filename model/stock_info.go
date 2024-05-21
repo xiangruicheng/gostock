@@ -135,3 +135,29 @@ func (model *StockInfoModel) UpdateHs300(codeArr []string) (int64, error) {
 	}
 	return affected, nil
 }
+
+func (model *StockInfoModel) UpdateCyb(codeArr []string) (int64, error) {
+	var affected int64 = 0
+	sql := "UPDATE `stock_info` SET `cyb`=0"
+	res, err := server.MysqlClient.Exec(sql)
+	if err != nil {
+		return affected, err
+	}
+
+	codeStr := ""
+	for _, code := range codeArr {
+		codeStr += "'" + code + "',"
+	}
+	codeStr = strings.TrimRight(codeStr, ",")
+	sql = "UPDATE `stock_info` SET `cyb`=1 WHERE code in(" + codeStr + ");"
+	res, err = server.MysqlClient.Exec(sql)
+	if err != nil {
+		return affected, err
+	}
+
+	affected, err = res.RowsAffected()
+	if err != nil {
+		return affected, err
+	}
+	return affected, nil
+}

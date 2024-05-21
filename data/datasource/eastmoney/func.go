@@ -35,6 +35,20 @@ func People(code string) (*PeopleResponse, error) {
 	return peopleResponse, nil
 }
 
+func Cyb() (*StockAllResponse, error) {
+	url := "https://45.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5000&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&dect=1&wbp2u=|0|0|0|web&fid=f3&fs=m:0+t:80&fields=fields=f12,f14"
+	stockAllRespons := new(StockAllResponse)
+	responseStr := request(url)
+	if responseStr == "" {
+		return stockAllRespons, errors.New("resp is empty")
+	}
+	err := json.Unmarshal([]byte(responseStr), &stockAllRespons)
+	if err != nil {
+		return stockAllRespons, err
+	}
+	return stockAllRespons, nil
+}
+
 func StockAll(market string) (*StockAllResponse, error) {
 	url := ""
 	if market == "SH" {
