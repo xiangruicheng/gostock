@@ -4,7 +4,6 @@ import (
 	"gostock/config"
 	"gostock/data/datainit"
 	"gostock/data/ddl"
-	"gostock/data/indicator"
 	"gostock/report"
 	"gostock/server"
 	"os"
@@ -33,7 +32,7 @@ var commandConfig = map[string]any{
 	"report:day":  report.Day,
 
 	"daily:kline": datainit.BatchIncrKline,
-	"daily:macd":  indicator.MacdBatchRun,
+	"daily:macd":  datainit.BatchUpdateMacd,
 	"daily:quote": datainit.BatchUpdateStockQuote,
 }
 
