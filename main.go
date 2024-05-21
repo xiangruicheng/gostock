@@ -27,8 +27,6 @@ var commandConfig = map[string]any{
 	"migrate:stock":  datainit.InitStockInfo,
 	"migrate:kline":  datainit.BatchInitKline,
 	"migrate:people": datainit.BatchUpdateStockPeople,
-	"migrate:hs300":  datainit.UpdateHs300,
-	"migrate:cyb":    datainit.UpdateCyb,
 
 	"report:real": report.Real,
 	"report:day":  report.Day,
