@@ -20,7 +20,6 @@ func main() {
 	if isCommand {
 		return
 	}
-
 }
 
 var commandConfig = map[string]any{

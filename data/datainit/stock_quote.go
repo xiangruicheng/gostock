@@ -5,27 +5,24 @@ import (
 	"gostock/data/datasource/xueqiu"
 	"gostock/model"
 	"gostock/server"
-	"strings"
 	"time"
 )
 
 func BatchUpdateStockQuote() {
-	stockCNList, err := xueqiu.StockAll()
+	stockAll, err := new(model.StockInfoModel).GetAll()
 	if err != nil {
 		server.Log.Error(err.Error())
 		return
 	}
-	count := len(stockCNList)
-	for k, stockCN := range stockCNList {
-		UpdateStockQuote(stockCN.Code)
-		server.Log.Info(fmt.Sprintf("update quote %d/%d %s", k, count, stockCN.Code))
+	count := len(stockAll)
+	for k, item := range stockAll {
+		UpdateStockQuote(item.Market, item.Code)
+		server.Log.Info(fmt.Sprintf("update quote %d/%d %s", k, count, item.Code))
 	}
 }
 
-func UpdateStockQuote(symbol string) {
-	market := symbol[0:2]
-	code := strings.TrimLeft(symbol, market)
-
+func UpdateStockQuote(market string, code string) {
+	symbol := market + code
 	quoteRes, _ := xueqiu.Quote(symbol)
 	quote := quoteRes.Data.Quote
 
