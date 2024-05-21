@@ -13,7 +13,7 @@ func (s *Macd) BatchRun() {
 	stockInfos, _ := new(model.StockInfoModel).GetAll()
 	count := len(stockInfos)
 	for k, item := range stockInfos {
-		server.Log.Info(fmt.Sprintf("(%d/%d) run macd", k, count))
+		server.Log.Info(fmt.Sprintf("(%d/%d) %s run macd", k, count, item.Code))
 		s.Run(item.Code)
 	}
 }
