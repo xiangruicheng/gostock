@@ -21,9 +21,6 @@ func main() {
 	if isCommand {
 		return
 	}
-
-	datainit.UpdateStockPeople("000001")
-
 }
 
 var commandConfig = map[string]any{

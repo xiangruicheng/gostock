@@ -3,27 +3,25 @@ package datainit
 import (
 	"fmt"
 	"gostock/data/datasource/eastmoney"
-	"gostock/data/datasource/xueqiu"
 	"gostock/model"
 	"gostock/server"
 	"time"
 )
 
 func BatchUpdateStockPeople() {
-	stockCNList, err := xueqiu.StockAll()
+	list, err := new(model.StockInfoModel).GetAll()
 	if err != nil {
 		server.Log.Error(err.Error())
 		return
 	}
-	count := len(stockCNList)
-	for k, stockCN := range stockCNList {
-		UpdateStockQuote(stockCN.Code)
-		server.Log.Info(fmt.Sprintf("update quote %d/%d %s", k, count, stockCN.Code))
+	count := len(list)
+	for k, item := range list {
+		UpdateStockPeople(item.Code)
+		server.Log.Info(fmt.Sprintf("update pepple %d/%d %s", k, count, item.Code))
 	}
 }
 
 func UpdateStockPeople(code string) {
-
 	peopleRes, err := eastmoney.People(code)
 	if err != nil {
 		server.Log.Error(fmt.Sprintf("UpdateStockPeople fail:%s,%s ", code, err.Error()))
