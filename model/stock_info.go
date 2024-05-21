@@ -73,6 +73,39 @@ func (model *StockInfoModel) GetAll() ([]*StockInfoRecord, error) {
 	return stockInfoRecords, nil
 }
 
+func (model *StockInfoModel) GetAllByTag(tag string) ([]*StockInfoRecord, error) {
+	sql := "SELECT id,code,name,market,cyb,hs300,kcb,c_time,u_time FROM stock_info "
+	if tag == "hs300" {
+		sql += " WHERE hs300=1"
+	}
+	if tag == "cyb" {
+		sql += " WHERE cyb=1"
+	}
+	rows, err := server.MysqlClient.Query(sql)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	stockInfoRecords := []*StockInfoRecord{}
+	for rows.Next() {
+		stockInfoRecord := new(StockInfoRecord)
+		err = rows.Scan(&stockInfoRecord.Id,
+			&stockInfoRecord.Code,
+			&stockInfoRecord.Name,
+			&stockInfoRecord.Market,
+			&stockInfoRecord.Cyb,
+			&stockInfoRecord.Hs300,
+			&stockInfoRecord.Kcb,
+			&stockInfoRecord.CTime,
+			&stockInfoRecord.UTime)
+		if err != nil {
+			return nil, err
+		}
+		stockInfoRecords = append(stockInfoRecords, stockInfoRecord)
+	}
+	return stockInfoRecords, nil
+}
+
 // Insert insert
 func (model *StockInfoModel) Insert(record *StockInfoRecord) (int64, error) {
 	var id int64 = 0

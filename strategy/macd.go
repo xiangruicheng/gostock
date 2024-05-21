@@ -86,7 +86,7 @@ func MacdOne(code string) *StrategyResult {
 	goldList := macd2Buy(code)
 
 	for _, startKline := range goldList {
-		endKline := afterXKline(klines, startKline.Date, 10)
+		endKline := afterXKline(klines, startKline.Date, 5)
 		if endKline == nil {
 			continue
 		}
@@ -116,7 +116,7 @@ func MacdOne(code string) *StrategyResult {
 
 func MacdStragegy() {
 
-	list, _ := new(model.StockInfoModel).GetAll()
+	list, _ := new(model.StockInfoModel).GetAllByTag("hs300")
 
 	TotalResult := new(StrategyResult)
 	for k, item := range list {

@@ -6,6 +6,7 @@ import (
 	"gostock/data/ddl"
 	"gostock/report"
 	"gostock/server"
+	"gostock/strategy"
 	"os"
 	"reflect"
 )
@@ -20,6 +21,8 @@ func main() {
 	if isCommand {
 		return
 	}
+
+	strategy.MacdStragegy()
 }
 
 var commandConfig = map[string]any{
