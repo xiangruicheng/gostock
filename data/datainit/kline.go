@@ -62,6 +62,6 @@ func BatchIncrKline() {
 	}
 	for key, stockInfoRecord := range stockInfoRecords {
 		InitKline(stockInfoRecord.Code, stockInfoRecord.Market, config.Data.Xueqiu.IncrNum)
-		server.Log.Error(fmt.Sprintf("incr kline key=%d code=%s", key, stockInfoRecord.Code))
+		server.Log.Info(fmt.Sprintf("incr kline key=%d code=%s", key, stockInfoRecord.Code))
 	}
 }
