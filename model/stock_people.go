@@ -41,3 +41,30 @@ func (model *StockPeopleModel) BatchInsert(records []*StockPeopleRecord) (int64,
 	}
 	return rowsAffected, nil
 }
+
+func (model *StockPeopleModel) GetByCode(code string) ([]*StockPeopleRecord, error) {
+	sql := "SELECT id,code,date,holder_num,avg_market,avg_hold_num,c_time,u_time FROM stock_people where code=? order by date desc"
+	rows, err := server.MysqlClient.Query(sql, code)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	stockPeopleRecords := []*StockPeopleRecord{}
+
+	for rows.Next() {
+		stockPeopleRecord := new(StockPeopleRecord)
+		err = rows.Scan(&stockPeopleRecord.Id,
+			&stockPeopleRecord.Code,
+			&stockPeopleRecord.Date,
+			&stockPeopleRecord.HolderNum,
+			&stockPeopleRecord.AvgHoldNum,
+			&stockPeopleRecord.AvgHoldNum,
+			&stockPeopleRecord.CTime,
+			&stockPeopleRecord.UTime)
+		if err != nil {
+			return nil, err
+		}
+		stockPeopleRecords = append(stockPeopleRecords, stockPeopleRecord)
+	}
+	return stockPeopleRecords, nil
+}
