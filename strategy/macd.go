@@ -5,8 +5,10 @@ import (
 	"gostock/model"
 )
 
-// 金叉
-func macdGold(code string) []*model.MacdRecord {
+type MacdStrategy struct {
+}
+
+func (s *MacdStrategy) gold(code string) []*model.MacdRecord {
 	list := []*model.MacdRecord{}
 	macds, _ := new(model.MacdModel).GetByCode(code)
 	for k, curMacd := range macds {
@@ -21,10 +23,9 @@ func macdGold(code string) []*model.MacdRecord {
 	return list
 }
 
-// 底背离
-func macdBL(code string) []*model.MacdRecord {
+func (s *MacdStrategy) dbl(code string) []*model.MacdRecord {
 	list := []*model.MacdRecord{}
-	macds := macdGold(code)
+	macds := s.gold(code)
 	for k, curMacd := range macds {
 		if k-1 < 0 {
 			continue
@@ -41,10 +42,9 @@ func macdBL(code string) []*model.MacdRecord {
 	return list
 }
 
-// macd2买金叉
-func macd2Buy(code string) []*model.MacdRecord {
+func (s *MacdStrategy) gold2buy(code string) []*model.MacdRecord {
 	list := []*model.MacdRecord{}
-	macds := macdGold(code)
+	macds := s.gold(code)
 	for k, curMacd := range macds {
 		if k-2 < 0 {
 			continue
@@ -70,7 +70,7 @@ type StrategyResult struct {
 	MinPercent   float64
 }
 
-func PrintStrategyResult(r *StrategyResult) {
+func (s *MacdStrategy) printStrategyResult(r *StrategyResult) {
 	fmt.Printf("UpNum=%d    ", r.UpNum)
 	fmt.Printf("DownNum=%d  ", r.DownNum)
 	fmt.Printf("TotalNum=%d ", r.TotalNum)
@@ -81,11 +81,11 @@ func PrintStrategyResult(r *StrategyResult) {
 
 }
 
-func MacdOne(code string) *StrategyResult {
+func (s *MacdStrategy) runOne(code string) *StrategyResult {
 	sr := new(StrategyResult)
 
 	klines, _ := new(model.KlineModel).GetByCode(code)
-	goldList := macdBL(code)
+	goldList := s.dbl(code)
 
 	for _, startKline := range goldList {
 		endKline := afterXKline(klines, startKline.Date, 5)
@@ -116,18 +116,17 @@ func MacdOne(code string) *StrategyResult {
 	return sr
 }
 
-func MacdStragegy() {
+func (s *MacdStrategy) Run() {
 
 	list, _ := new(model.StockInfoModel).GetAllByTag("hs300")
-
 	TotalResult := new(StrategyResult)
 	for k, item := range list {
-		oneResult := MacdOne(item.Code)
+		oneResult := s.runOne(item.Code)
 		if oneResult.TotalNum < 2 {
 			continue
 		}
 		fmt.Printf("%d:%s  %d/%d\n", k, item.Code, oneResult.UpNum, oneResult.TotalNum)
-		PrintStrategyResult(oneResult)
+		s.printStrategyResult(oneResult)
 
 		TotalResult.UpNum += oneResult.UpNum
 		TotalResult.DownNum += oneResult.DownNum
@@ -136,5 +135,19 @@ func MacdStragegy() {
 		TotalResult.TotalNum += oneResult.TotalNum
 	}
 
-	PrintStrategyResult(TotalResult)
+	s.printStrategyResult(TotalResult)
+}
+
+// afterXKline Date After X day Kline
+func afterXKline(klines []*model.KlineRecord, date string, x int) *model.KlineRecord {
+	xTag := 0
+	for _, kline := range klines {
+		if kline.Date > date {
+			xTag += 1
+			if xTag == x {
+				return kline
+			}
+		}
+	}
+	return nil
 }

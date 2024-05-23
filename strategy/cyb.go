@@ -5,7 +5,10 @@ import (
 	"gostock/model"
 )
 
-func Cyb() {
+type CybStrategy struct {
+}
+
+func (s *CybStrategy) Run() {
 	arr := [][]string{
 		{"20100101", "20110101"},
 		{"20110101", "20120101"},
@@ -23,15 +26,13 @@ func Cyb() {
 		{"20230101", "20240101"},
 		{"20240101", "20250101"},
 	}
-
 	for _, t := range arr {
-		cybStrategy(t[0], t[1])
+		s.runRangeTime(t[0], t[1])
 	}
 
 }
 
-// cybStrategy1
-func cybStrategy(min string, max string) {
+func (s *CybStrategy) runRangeTime(min string, max string) {
 	klines, _ := new(model.KlineModel).GetByCodeRangeDate("159915", "20100101", "20250101")
 	var downDyas int
 	var nextDayPercentTotal float64
@@ -55,7 +56,5 @@ func cybStrategy(min string, max string) {
 			downDyas += 1
 		}
 	}
-
 	fmt.Printf("%s-%s %d/%d %f\n", min, max, downDyas, len(klines), nextDayPercentTotal)
-
 }

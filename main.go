@@ -22,7 +22,7 @@ func main() {
 		return
 	}
 
-	strategy.MacdStragegy()
+	new(strategy.MacdStrategy).Run()
 }
 
 var commandConfig = map[string]any{
