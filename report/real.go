@@ -14,8 +14,8 @@ var RealPeportConfig = [][]string{
 
 // this is real
 func Real() {
-	fmt.Printf("%10s|%10s|%10s|%10s|\n", "TAG", "PRICE", "PERCENT", "CHG")
-	fmt.Printf("%10s|%10s|%10s|%10s|\n", "----------", "----------", "----------", "----------")
+	fmt.Printf("%10s|%10s|%10s|%10s|%10s|\n", "TAG", "PRICE", "PERCENT", "High", "LOW")
+	fmt.Printf("%10s|%10s|%10s|%10s|%10s|\n", "----------", "----------", "----------", "----------", "----------")
 	for _, item := range RealPeportConfig {
 		tag := item[0]
 		symbol := item[1]
@@ -28,7 +28,7 @@ func Real() {
 		} else {
 			currentColor = fmt.Sprintf("%10.3f", quote.Data.Quote.Current)
 		}
-		fmt.Printf("%10s|%s|%10.3f|%10.3f|\n", tag, currentColor, quote.Data.Quote.Percent, quote.Data.Quote.Chg)
+		fmt.Printf("%10s|%s|%10.3f|%10.3f|%10.3f|\n", tag, currentColor, quote.Data.Quote.Percent, quote.Data.Quote.High, quote.Data.Quote.Low)
 	}
 }
 

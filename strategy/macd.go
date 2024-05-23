@@ -29,10 +29,12 @@ func macdBL(code string) []*model.MacdRecord {
 		if k-1 < 0 {
 			continue
 		}
+
 		preMacd := macds[k-1]
+		percent := ((curMacd.Close - preMacd.Close) / preMacd.Close) * 100
 		if preMacd.Diff < curMacd.Diff &&
 			preMacd.Dea < curMacd.Dea &&
-			preMacd.Close > curMacd.Close {
+			percent < -1.0 {
 			list = append(list, curMacd)
 		}
 	}
@@ -83,7 +85,7 @@ func MacdOne(code string) *StrategyResult {
 	sr := new(StrategyResult)
 
 	klines, _ := new(model.KlineModel).GetByCode(code)
-	goldList := macd2Buy(code)
+	goldList := macdBL(code)
 
 	for _, startKline := range goldList {
 		endKline := afterXKline(klines, startKline.Date, 5)
