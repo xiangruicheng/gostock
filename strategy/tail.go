@@ -44,7 +44,7 @@ func (s *TailStrategy) RunLine() {
 
 	for {
 		if date > end {
-			return
+			break
 		}
 		fmt.Printf("%s begin\n", date)
 
@@ -72,8 +72,8 @@ func (s *TailStrategy) RunLine() {
 			fmt.Printf("%s buy %s %f\n", date, kline.Code, percent)
 		}
 		date = s.nextDay(date)
-		fmt.Println(result)
 	}
+	fmt.Println(result)
 
 }
 
