@@ -28,7 +28,7 @@ func (s *TailStrategy) RunLine() {
 
 	result := new(TailResult)
 	date := "20220101"
-	end := "20220106"
+	end := "20230101"
 
 	codeArr := []string{}
 	all, _ := new(model.StockInfoModel).GetAllByTag("hs300")
@@ -48,8 +48,8 @@ func (s *TailStrategy) RunLine() {
 		}
 		fmt.Printf("%s begin\n", date)
 
-		sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time from kline where code in(%s) and  date=%s and percent<%d"
-		sql = fmt.Sprintf(sql, codeStr, date, -5)
+		sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time from kline where code in(%s) and  date=%s and percent>%d and percent<%d"
+		sql = fmt.Sprintf(sql, codeStr, date, -6, -4)
 		klines, _ := new(model.KlineModel).Query(sql)
 		if len(klines) <= 0 {
 			date = s.nextDay(date)
@@ -62,12 +62,13 @@ func (s *TailStrategy) RunLine() {
 				continue
 			}
 			nextKline := nextKlines[0]
-			if nextKline.Open > kline.Close {
+			sell := nextKline.Close
+			if sell > kline.Close {
 				result.UpNum += 1
 			} else {
 				result.DownNum += 1
 			}
-			percent := ((nextKline.Open - kline.Low) / kline.Close) * 100
+			percent := ((sell - kline.Close) / kline.Close) * 100
 			result.UpPercent += percent
 			fmt.Printf("%s buy %s %f\n", date, kline.Code, percent)
 		}
