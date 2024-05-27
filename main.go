@@ -6,6 +6,7 @@ import (
 	"gostock/data/ddl"
 	"gostock/report"
 	"gostock/server"
+	"gostock/strategy"
 	"os"
 	"reflect"
 )
@@ -21,7 +22,9 @@ func main() {
 		return
 	}
 
-	new(report.PeopleReport).Run()
+	//new(report.PeopleReport).Run()
+	new(strategy.TailStrategy).RunLine()
+
 }
 
 var commandConfig = map[string]any{

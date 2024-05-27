@@ -23,6 +23,21 @@ func (s *MacdStrategy) gold(code string) []*model.MacdRecord {
 	return list
 }
 
+func (s *MacdStrategy) die(code string) []*model.MacdRecord {
+	list := []*model.MacdRecord{}
+	macds, _ := new(model.MacdModel).GetByCode(code)
+	for k, curMacd := range macds {
+		if k-1 < 0 {
+			continue
+		}
+		preMacd := macds[k-1]
+		if preMacd.Macd > 0 && curMacd.Macd < 0 {
+			list = append(list, curMacd)
+		}
+	}
+	return list
+}
+
 func (s *MacdStrategy) dbl(code string) []*model.MacdRecord {
 	list := []*model.MacdRecord{}
 	macds := s.gold(code)
@@ -81,14 +96,26 @@ func (s *MacdStrategy) printStrategyResult(r *StrategyResult) {
 
 }
 
+func (s *MacdStrategy) sellDie(klines []*model.MacdRecord, date string) *model.MacdRecord {
+	for _, kline := range klines {
+		if kline.Date > date {
+			return kline
+		}
+	}
+	return nil
+}
+
 func (s *MacdStrategy) runOne(code string) *StrategyResult {
 	sr := new(StrategyResult)
 
-	klines, _ := new(model.KlineModel).GetByCode(code)
+	//klines, _ := new(model.KlineModel).GetByCode(code)
 	goldList := s.dbl(code)
 
+	dieKlines := s.die(code)
+
 	for _, startKline := range goldList {
-		endKline := afterXKline(klines, startKline.Date, 5)
+		//endKline := afterXKline(klines, startKline.Date, 10)
+		endKline := s.sellDie(dieKlines, startKline.Date)
 		if endKline == nil {
 			continue
 		}
