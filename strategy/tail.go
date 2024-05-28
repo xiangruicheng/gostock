@@ -27,8 +27,8 @@ func (s *TailStrategy) Run() {
 func (s *TailStrategy) RunLine() {
 
 	result := new(TailResult)
-	date := "20220101"
-	end := "20230101"
+	date := "20200101"
+	end := "20240101"
 
 	codeArr := []string{}
 	all, _ := new(model.StockInfoModel).GetAllByTag("hs300")
@@ -48,9 +48,9 @@ func (s *TailStrategy) RunLine() {
 		}
 		fmt.Printf("%s begin\n", date)
 
-		sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time from kline where code in(%s) and  date=%s and percent>%d and percent<%d"
-		sql = fmt.Sprintf(sql, codeStr, date, -6, -4)
-		klines, _ := new(model.KlineModel).Query(sql)
+		where := "code in(%s) and  date=%s and percent>%d and percent<%d"
+		where = fmt.Sprintf(where, codeStr, date, -6, -4)
+		klines, _ := new(model.KlineModel).Query(where)
 		if len(klines) <= 0 {
 			date = s.nextDay(date)
 			continue

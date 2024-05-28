@@ -24,6 +24,9 @@ func main() {
 
 	//new(report.PeopleReport).Run()
 	new(strategy.TailStrategy).RunLine()
+	///a := 2477 * 20000 * 3 / 10000
+	//b := 20000*4.78 - a
+	//fmt.Println(b) //14862
 
 }
 
