@@ -58,6 +58,8 @@ func InitRedis() {
 }
 
 func Help() {
-	util.PrintCommand("migrate:db", "Create DB and Create Table")
-	util.PrintCommand("migrate:stock", "Init stock_info Table")
+	util.PrintCommand("make:db", "Create DB and Create Table")
+	util.PrintCommand("make:stock", "Init stock_info Table")
+	util.PrintCommand("make:kline", "Init kline Table")
+	util.PrintCommand("make:people", "Init stock_people Table")
 }

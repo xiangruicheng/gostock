@@ -32,10 +32,10 @@ func main() {
 }
 
 var commandConfig = map[string]any{
-	"migrate:db":     ddl.Create,
-	"migrate:stock":  datainit.InitStockInfo,
-	"migrate:kline":  datainit.BatchInitKline,
-	"migrate:people": datainit.BatchUpdateStockPeople,
+	"make:db":     ddl.Create,
+	"make:stock":  datainit.InitStockInfo,
+	"make:kline":  datainit.BatchInitKline,
+	"make:people": datainit.BatchUpdateStockPeople,
 
 	"report:real": report.Real,
 	"report:day":  report.Day,
