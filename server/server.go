@@ -7,6 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/redis/go-redis/v9"
 	"gostock/config"
+	"gostock/util"
 	"log"
 )
 
@@ -54,4 +55,9 @@ func InitRedis() {
 		return
 	}
 	//log.Println("datainit RedisClient success")
+}
+
+func Help() {
+	util.PrintCommand("migrate:db", "Create DB and Create Table")
+	util.PrintCommand("migrate:stock", "Init stock_info Table")
 }
