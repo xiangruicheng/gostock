@@ -46,6 +46,22 @@ func (f *FeatureStruct) IsCrossStar(code string, date string) bool {
 	return false
 }
 
+func (f *FeatureStruct) PercentGtX(code string, date string, x float64) bool {
+	kline, _ := new(model.KlineModel).GetByCodeAndDate(code, date)
+	if kline.Percent > x {
+		return true
+	}
+	return false
+}
+
+func (f *FeatureStruct) PercentLtX(code string, date string, x float64) bool {
+	kline, _ := new(model.KlineModel).GetByCodeAndDate(code, date)
+	if kline.Percent < x {
+		return true
+	}
+	return false
+}
+
 func init() {
 	Feature = new(FeatureStruct)
 }
