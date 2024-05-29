@@ -62,6 +62,29 @@ func (f *FeatureStruct) PercentLtX(code string, date string, x float64) bool {
 	return false
 }
 
+func (f *FeatureStruct) IsCyb(code string) bool {
+	info, _ := new(model.StockInfoModel).GetByCode(code)
+	if info.Cyb == 1 {
+		return true
+	}
+	return false
+}
+
+func (f *FeatureStruct) IsHs300(code string) bool {
+	info, _ := new(model.StockInfoModel).GetByCode(code)
+	if info.Hs300 == 1 {
+		return true
+	}
+	return false
+}
+
+func (f *FeatureStruct) IsKcb(code string) bool {
+	if code[0:3] == "688" {
+		return true
+	}
+	return false
+}
+
 func init() {
 	Feature = new(FeatureStruct)
 }
