@@ -26,29 +26,34 @@ func (td *TradeDay) IsTradeDay(date string) bool {
 }
 
 func (td *TradeDay) PreTradeDate(date string, num int) string {
-	k := td.getKey(date)
-	if k < 0 {
-		return ""
+	var index int = -1
+	for k, d := range td.Dates {
+		if d >= date {
+			index = k
+			break
+		}
 	}
-	if k-num < 0 {
-		return ""
+	if index-num >= 0 {
+		return td.Dates[index-num]
 	}
-	return td.Dates[k-num]
+	return ""
 }
 
 func (td *TradeDay) NextTradeDate(date string, num int) string {
-	k := td.getKey(date)
-	if k < 0 {
-		return ""
+	var tagNum int = 0
+	for _, d := range td.Dates {
+		if d > date {
+			tagNum += 1
+			if tagNum == num {
+				return d
+			}
+		}
 	}
-	if k+num > len(td.Dates) {
-		return ""
-	}
-	return td.Dates[k+num]
+	return ""
 }
 
 func (td *TradeDay) InitTradeDay() {
-	klines, _ := new(model.KlineModel).Query("code='1A0001' order by date asc")
+	klines, _ := new(model.KlineModel).GetByCode("1A0001")
 	for _, kline := range klines {
 		td.Dates = append(td.Dates, kline.Date)
 	}

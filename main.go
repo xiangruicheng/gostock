@@ -30,7 +30,7 @@ func main() {
 	//b := 20000*4.78 - a
 	//fmt.Println(b) //14862
 
-	//a := strategy.TD.NextTradeDate("20240406", 2)
+	//a := strategy.TD.PreTradeDate("20240107", 1)
 	//fmt.Println(a)
 
 }
