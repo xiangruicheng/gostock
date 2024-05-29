@@ -40,7 +40,21 @@ func (f *FeatureStruct) IsMacdDie(code string, date string) bool {
 
 func (f *FeatureStruct) IsCrossStar(code string, date string) bool {
 	kline, _ := new(model.KlineModel).GetByCodeAndDate(code, date)
-	if math.Abs(kline.Open-kline.Close)/(kline.High-kline.Low) < 0.0001 {
+	upLineRate := (kline.High - max(kline.Open, kline.Close)) / (kline.High - kline.Low)
+	entityRate := math.Abs(kline.Open-kline.Close) / (kline.High - kline.Low)
+	downLineRate := (min(kline.Open, kline.Close) - kline.Low) / (kline.High - kline.Low)
+	if upLineRate > 0.45 && downLineRate > 0.45 && entityRate < 0.01 {
+		return true
+	}
+	return false
+}
+
+func (f *FeatureStruct) IsT(code string, date string) bool {
+	kline, _ := new(model.KlineModel).GetByCodeAndDate(code, date)
+	upLineRate := (kline.High - max(kline.Open, kline.Close)) / (kline.High - kline.Low)
+	entityRate := math.Abs(kline.Open-kline.Close) / (kline.High - kline.Low)
+	downLineRate := (min(kline.Open, kline.Close) - kline.Low) / (kline.High - kline.Low)
+	if upLineRate < 0.1 && downLineRate > 0.9 && entityRate < 0.01 {
 		return true
 	}
 	return false

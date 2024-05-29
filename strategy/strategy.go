@@ -15,7 +15,7 @@ type Strategy interface {
 func Test() {
 	all, _ := new(model.StockInfoModel).GetAll()
 	for _, item := range all {
-		if Feature.IsMacdGold(item.Code, "20240529") {
+		if Feature.IsT(item.Code, "20240529") {
 			fmt.Println(item.Code)
 		}
 	}
