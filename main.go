@@ -3,10 +3,10 @@ package main
 import (
 	"gostock/config"
 	"gostock/data/datainit"
-	"gostock/data/datasource/ths"
 	"gostock/data/ddl"
 	"gostock/report"
 	"gostock/server"
+	"gostock/strategy"
 	"os"
 	"reflect"
 )
@@ -15,6 +15,8 @@ func main() {
 	config.InitConfig()
 	server.InitRedis()
 	server.InitMysql()
+
+	strategy.TD.InitTradeDay()
 
 	// exec command
 	isCommand := CommandInit()
@@ -27,7 +29,9 @@ func main() {
 	///a := 2477 * 20000 * 3 / 10000
 	//b := 20000*4.78 - a
 	//fmt.Println(b) //14862
-	ths.Dp()
+
+	//a := strategy.TD.NextTradeDate("20240406", 2)
+	//fmt.Println(a)
 
 }
 

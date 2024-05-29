@@ -159,6 +159,7 @@ func (model *KlineModel) GetByCodeGtDate(code string, min string) ([]*KlineRecor
 
 func (model *KlineModel) Query(where string) ([]*KlineRecord, error) {
 	sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time from kline where " + where
+
 	rows, err := server.MysqlClient.Query(sql)
 	defer rows.Close()
 	if err != nil {
