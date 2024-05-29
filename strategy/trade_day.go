@@ -2,13 +2,13 @@ package strategy
 
 import "gostock/model"
 
-type TradeDay struct {
+type TradeDayStruct struct {
 	Dates []string
 }
 
-var TD *TradeDay
+var TradeDay *TradeDayStruct
 
-func (td *TradeDay) getKey(date string) int {
+func (td *TradeDayStruct) getKey(date string) int {
 	for k, d := range td.Dates {
 		if d == date {
 			return k
@@ -17,7 +17,7 @@ func (td *TradeDay) getKey(date string) int {
 	return -1
 }
 
-func (td *TradeDay) IsTradeDay(date string) bool {
+func (td *TradeDayStruct) IsTradeDay(date string) bool {
 	k := td.getKey(date)
 	if k >= 0 {
 		return true
@@ -25,7 +25,7 @@ func (td *TradeDay) IsTradeDay(date string) bool {
 	return false
 }
 
-func (td *TradeDay) PreTradeDate(date string, num int) string {
+func (td *TradeDayStruct) PreTradeDate(date string, num int) string {
 	var index int = -1
 	for k, d := range td.Dates {
 		if d >= date {
@@ -39,7 +39,7 @@ func (td *TradeDay) PreTradeDate(date string, num int) string {
 	return ""
 }
 
-func (td *TradeDay) NextTradeDate(date string, num int) string {
+func (td *TradeDayStruct) NextTradeDate(date string, num int) string {
 	var tagNum int = 0
 	for _, d := range td.Dates {
 		if d > date {
@@ -52,7 +52,7 @@ func (td *TradeDay) NextTradeDate(date string, num int) string {
 	return ""
 }
 
-func (td *TradeDay) InitTradeDay() {
+func (td *TradeDayStruct) InitTradeDay() {
 	klines, _ := new(model.KlineModel).GetByCode("1A0001")
 	for _, kline := range klines {
 		td.Dates = append(td.Dates, kline.Date)
@@ -60,5 +60,5 @@ func (td *TradeDay) InitTradeDay() {
 }
 
 func init() {
-	TD = new(TradeDay)
+	TradeDay = new(TradeDayStruct)
 }

@@ -16,7 +16,7 @@ func main() {
 	server.InitRedis()
 	server.InitMysql()
 
-	strategy.TD.InitTradeDay()
+	strategy.TradeDay.InitTradeDay()
 
 	// exec command
 	isCommand := CommandInit()
