@@ -57,6 +57,35 @@ func (model *KlineModel) GetByCode(code string) ([]*KlineRecord, error) {
 	return klineRecords, nil
 }
 
+// GetByCodeAndDate
+func (model *KlineModel) GetByCodeAndDate(code string, date string) (*KlineRecord, error) {
+	sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where code=? and date=?"
+	rows, err := server.MysqlClient.Query(sql, code, date)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	klineRecord := new(KlineRecord)
+	if rows.Next() {
+		err = rows.Scan(&klineRecord.Id,
+			&klineRecord.Code,
+			&klineRecord.Date,
+			&klineRecord.Volume,
+			&klineRecord.Open,
+			&klineRecord.High,
+			&klineRecord.Low,
+			&klineRecord.Close,
+			&klineRecord.Chg,
+			&klineRecord.Percent,
+			&klineRecord.CTime,
+			&klineRecord.UTime)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return klineRecord, nil
+}
+
 // Insert insert
 func (model *KlineModel) Insert(record *KlineRecord) (int64, error) {
 	var id int64 = 0

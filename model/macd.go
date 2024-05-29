@@ -72,3 +72,30 @@ func (model *MacdModel) GetByCode(code string) ([]*MacdRecord, error) {
 	}
 	return macdRecords, nil
 }
+
+func (model *MacdModel) GetByCodeAndDate(code string, date string) (*MacdRecord, error) {
+	sql := "SELECT id,code,date,close,ema12,ema26,diff,dea,macd,c_time,u_time FROM macd where code=? and date=?"
+	rows, err := server.MysqlClient.Query(sql, code, date)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	macdRecord := new(MacdRecord)
+	if rows.Next() {
+		err = rows.Scan(&macdRecord.Id,
+			&macdRecord.Code,
+			&macdRecord.Date,
+			&macdRecord.Close,
+			&macdRecord.Ema12,
+			&macdRecord.Ema26,
+			&macdRecord.Diff,
+			&macdRecord.Dea,
+			&macdRecord.Macd,
+			&macdRecord.CTime,
+			&macdRecord.UTime)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return macdRecord, nil
+}

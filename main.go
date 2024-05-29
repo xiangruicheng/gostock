@@ -24,14 +24,7 @@ func main() {
 		return
 	}
 
-	//new(report.PeopleReport).Run()
-	//new(strategy.TailStrategy).RunLine()
-	///a := 2477 * 20000 * 3 / 10000
-	//b := 20000*4.78 - a
-	//fmt.Println(b) //14862
-
-	//a := strategy.TD.PreTradeDate("20240107", 1)
-	//fmt.Println(a)
+	strategy.Test()
 
 }
 
