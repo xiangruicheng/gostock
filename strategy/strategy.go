@@ -15,8 +15,9 @@ type Strategy interface {
 func Test() {
 	all, _ := new(model.StockInfoModel).GetAll()
 	for _, item := range all {
-		if Feature.IsT(item.Code, "20240529") {
+		if Feature.VolumeRateRange(item.Code, "20240529", 1, 3) {
 			fmt.Println(item.Code)
+			break
 		}
 	}
 }

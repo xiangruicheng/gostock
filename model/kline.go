@@ -186,6 +186,37 @@ func (model *KlineModel) GetByCodeGtDate(code string, min string) ([]*KlineRecor
 	return klineRecords, nil
 }
 
+func (model *KlineModel) GetByCodeLtDate(code string, min string) ([]*KlineRecord, error) {
+	sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time FROM kline where code=? and date>?"
+	rows, err := server.MysqlClient.Query(sql, code, min)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	klineRecords := []*KlineRecord{}
+
+	for rows.Next() {
+		klineRecord := new(KlineRecord)
+		err = rows.Scan(&klineRecord.Id,
+			&klineRecord.Code,
+			&klineRecord.Date,
+			&klineRecord.Volume,
+			&klineRecord.Open,
+			&klineRecord.High,
+			&klineRecord.Low,
+			&klineRecord.Close,
+			&klineRecord.Chg,
+			&klineRecord.Percent,
+			&klineRecord.CTime,
+			&klineRecord.UTime)
+		if err != nil {
+			return nil, err
+		}
+		klineRecords = append(klineRecords, klineRecord)
+	}
+	return klineRecords, nil
+}
+
 func (model *KlineModel) Query(where string) ([]*KlineRecord, error) {
 	sql := "SELECT id,code,date,volume,open,high,low,close,chg,percent,c_time,u_time from kline where " + where
 

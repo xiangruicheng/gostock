@@ -1,6 +1,7 @@
 package strategy
 
 import (
+	"fmt"
 	"gostock/model"
 	"math"
 )
@@ -68,6 +69,14 @@ func (f *FeatureStruct) PercentGtX(code string, date string, x float64) bool {
 	return false
 }
 
+func (f *FeatureStruct) PercentRange(code string, date string, min float64, max float64) bool {
+	kline, _ := new(model.KlineModel).GetByCodeAndDate(code, date)
+	if kline.Percent > min && kline.Percent < max {
+		return true
+	}
+	return false
+}
+
 func (f *FeatureStruct) PercentLtX(code string, date string, x float64) bool {
 	kline, _ := new(model.KlineModel).GetByCodeAndDate(code, date)
 	if kline.Percent < x {
@@ -94,6 +103,37 @@ func (f *FeatureStruct) IsHs300(code string) bool {
 
 func (f *FeatureStruct) IsKcb(code string) bool {
 	if code[0:3] == "688" {
+		return true
+	}
+	return false
+}
+
+func (f *FeatureStruct) VolumeRateRange(code string, date string, min float64, max float64) bool {
+	if !TradeDay.IsTradeDay(date) {
+		return false
+	}
+
+	// get data
+	startDate := TradeDay.PreTradeDate(date, 5)
+	where := fmt.Sprintf("code='%s' and date>='%s' and date<='%s' order by date desc", code, startDate, date)
+	klines, _ := new(model.KlineModel).Query(where)
+	if len(klines) < 6 {
+		return false
+	}
+
+	// volumeRate
+	var currVolume, totalVolume, total float64
+	for k, kline := range klines {
+		if k == 0 {
+			currVolume = kline.Volume
+		} else {
+			totalVolume += kline.Volume
+			total += 1
+		}
+	}
+	volumeRate := currVolume / (totalVolume / total)
+
+	if volumeRate >= min && volumeRate <= max {
 		return true
 	}
 	return false
