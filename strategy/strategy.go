@@ -14,9 +14,12 @@ type Strategy interface {
 // 策略3：MACD金叉 T型 第二天开盘上涨等到收盘卖，第二天下跌开盘就卖 胜率2：1
 
 func Test() {
-	date := "20240530"
+	date := "20240529"
 	all, _ := new(model.StockInfoModel).GetAll()
 	for _, item := range all {
+		if item.Code[0:1] == "3" || item.Code[0:3] == "688" {
+			continue
+		}
 		if !Feature.IsMacdGold(item.Code, date) {
 			continue
 		}
@@ -33,24 +36,33 @@ func Test3() {
 	var upNum, downNum int
 	var TotalPercent float64
 	for _, date := range TradeDay.Dates {
-		if date < "20240101" || date > "20250101" {
+		if date < "20230101" || date > "20240101" {
 			continue
 		}
 		for _, item := range all {
+			if item.Code[0:1] == "3" || item.Code[0:3] == "688" {
+				continue
+			}
 			if !Feature.IsMacdGold(item.Code, date) {
 				continue
 			}
 			if !Feature.IsT(item.Code, date) {
 				continue
 			}
-
 			buyKline, _ := new(model.KlineModel).GetByCodeAndDate(item.Code, date)
+			if buyKline.Percent < 9 {
+				continue
+			}
+
 			buy := buyKline.Close
 			nextDay := TradeDay.NextTradeDate(date, 1)
 			if nextDay == "" {
 				continue
 			}
 			sellKline, _ := new(model.KlineModel).GetByCodeAndDate(item.Code, nextDay)
+			if sellKline.Date == "" {
+				continue
+			}
 			sell := sellKline.Close
 			if sellKline.Open > buyKline.Close {
 				sell = sellKline.Open
