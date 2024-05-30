@@ -24,7 +24,7 @@ func main() {
 		return
 	}
 
-	strategy.Test()
+	strategy.Test3()
 
 }
 
