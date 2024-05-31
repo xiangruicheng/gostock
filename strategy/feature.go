@@ -108,6 +108,7 @@ func (f *FeatureStruct) IsKcb(code string) bool {
 	return false
 }
 
+// VolumeRateRange 量比在min,max范围内
 func (f *FeatureStruct) VolumeRateRange(code string, date string, min float64, max float64) bool {
 	if !TradeDay.IsTradeDay(date) {
 		return false
@@ -137,6 +138,26 @@ func (f *FeatureStruct) VolumeRateRange(code string, date string, min float64, m
 		return true
 	}
 	return false
+}
+
+// IsLastXDaysMin 是否为最近X天的最低价
+func (f *FeatureStruct) IsLastXDaysMin(code string, date string, x int) bool {
+	if !TradeDay.IsTradeDay(date) {
+		return false
+	}
+	startDate := TradeDay.PreTradeDate(date, x)
+
+	klines, _ := new(model.KlineModel).GetByCodeERangeDate(code, startDate, date)
+	if len(klines) < (x + 1) {
+		return false
+	}
+	currKline := klines[len(klines)-1]
+	for _, kline := range klines {
+		if kline.Close < currKline.Close {
+			return false
+		}
+	}
+	return true
 }
 
 func init() {

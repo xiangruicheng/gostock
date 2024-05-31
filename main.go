@@ -24,7 +24,9 @@ func main() {
 		return
 	}
 
-	new(report.PeopleReport).Run()
+	strategy.Test()
+
+	//new(report.PeopleReport).Run()
 
 }
 

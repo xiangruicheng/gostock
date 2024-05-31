@@ -12,7 +12,7 @@ func (r *PeopleReport) Run() {
 	all, _ := new(model.StockInfoModel).GetAllByTag("hs300")
 	for _, item := range all {
 		stockPeopleRecords, _ := new(model.StockPeopleModel).GetByCode(item.Code)
-		if r.isReduce(stockPeopleRecords, 3, -2) {
+		if r.isReduce(stockPeopleRecords, 3, -5) {
 			fmt.Println(item.Code)
 		}
 	}
