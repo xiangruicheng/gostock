@@ -10,6 +10,10 @@ type FeatureStruct struct {
 
 var Feature *FeatureStruct
 
+func init() {
+	Feature = new(FeatureStruct)
+}
+
 func (f *FeatureStruct) IsMacdGold(code string, date string) bool {
 	currMacd, _ := new(model.MacdModel).GetByCodeAndDate(code, date)
 	preTradeDay := TradeDay.PreTradeDate(date, 1)
@@ -176,8 +180,4 @@ func (f *FeatureStruct) IsLastXDaysMacdMin(code string, date string, x int) bool
 		}
 	}
 	return true
-}
-
-func init() {
-	Feature = new(FeatureStruct)
 }
