@@ -140,8 +140,8 @@ func (f *FeatureStruct) VolumeRateRange(code string, date string, min float64, m
 	return false
 }
 
-// IsLastXDaysMin 是否为最近X天的最低价
-func (f *FeatureStruct) IsLastXDaysMin(code string, date string, x int) bool {
+// IsLastXDaysCloseMin 是否为最近X天的最低价
+func (f *FeatureStruct) IsLastXDaysCloseMin(code string, date string, x int) bool {
 	if !TradeDay.IsTradeDay(date) {
 		return false
 	}
