@@ -1,7 +1,6 @@
 package strategy
 
 import (
-	"fmt"
 	"gostock/model"
 	"math"
 )
@@ -116,21 +115,20 @@ func (f *FeatureStruct) VolumeRateRange(code string, date string, min float64, m
 
 	// get data
 	startDate := TradeDay.PreTradeDate(date, 5)
-	where := fmt.Sprintf("code='%s' and date>='%s' and date<='%s' order by date desc", code, startDate, date)
-	klines, _ := new(model.KlineModel).Query(where)
+	klines, _ := new(model.KlineModel).GetByCodeERangeDate(code, startDate, date)
 	if len(klines) < 6 {
 		return false
 	}
 
 	// volumeRate
-	var currVolume, totalVolume, total float64
+	currVolume := klines[5].Volume
+	var totalVolume, total float64
 	for k, kline := range klines {
-		if k == 0 {
-			currVolume = kline.Volume
-		} else {
+		if k < 5 {
 			totalVolume += kline.Volume
 			total += 1
 		}
+
 	}
 	volumeRate := currVolume / (totalVolume / total)
 
@@ -154,6 +152,26 @@ func (f *FeatureStruct) IsLastXDaysCloseMin(code string, date string, x int) boo
 	currKline := klines[len(klines)-1]
 	for _, kline := range klines {
 		if kline.Close < currKline.Close {
+			return false
+		}
+	}
+	return true
+}
+
+// IsLastXDaysMacdMin 是否为最近X天macd最小值
+func (f *FeatureStruct) IsLastXDaysMacdMin(code string, date string, x int) bool {
+	if !TradeDay.IsTradeDay(date) {
+		return false
+	}
+	startDate := TradeDay.PreTradeDate(date, x)
+
+	macds, _ := new(model.MacdModel).GetByCodeERangeDate(code, startDate, date)
+	if len(macds) < (x + 1) {
+		return false
+	}
+	currMacd := macds[len(macds)-1]
+	for _, macd := range macds {
+		if macd.Macd < currMacd.Macd {
 			return false
 		}
 	}

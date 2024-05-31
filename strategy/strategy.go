@@ -20,7 +20,11 @@ func Test() {
 		if item.Code[0:1] == "3" || item.Code[0:3] == "688" {
 			continue
 		}
-		if !Feature.IsLastXDaysMin(item.Code, date, 10) {
+		if !Feature.IsLastXDaysCloseMin(item.Code, date, 30) {
+			continue
+		}
+
+		if Feature.IsLastXDaysMacdMin(item.Code, date, 30) {
 			continue
 		}
 
