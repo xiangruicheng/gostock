@@ -62,4 +62,5 @@ func Help() {
 	util.PrintCommand("make:stock", "Init stock_info Table")
 	util.PrintCommand("make:kline", "Init kline Table")
 	util.PrintCommand("make:people", "Init stock_people Table")
+	util.PrintCommand("make:block", "Init stock_block&stock_block_code Table")
 }
