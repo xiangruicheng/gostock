@@ -23,7 +23,8 @@ func main() {
 	if isCommand {
 		return
 	}
-	//strategy.Test4()
+
+	new(report.PeopleReport).Run()
 
 }
 

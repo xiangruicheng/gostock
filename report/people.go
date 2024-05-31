@@ -12,28 +12,32 @@ func (r *PeopleReport) Run() {
 	all, _ := new(model.StockInfoModel).GetAllByTag("hs300")
 	for _, item := range all {
 		stockPeopleRecords, _ := new(model.StockPeopleModel).GetByCode(item.Code)
-		if r.isReduce(stockPeopleRecords) {
+		if r.isReduce(stockPeopleRecords, 3, -2) {
 			fmt.Println(item.Code)
 		}
 	}
 
 }
 
-// 连续减少
-func (r *PeopleReport) isReduce(list []*model.StockPeopleRecord) bool {
-	if len(list) < 3 {
+// isReduce
+// example isReduce(list,3,-2)
+func (r *PeopleReport) isReduce(list []*model.StockPeopleRecord, num int64, rate float64) bool {
+	if len(list) < int(num) {
 		return false
 	}
-	curRecord := list[0]
-	preRecord := list[1]
-	pre2Record := list[2]
-
-	rate := -0.02
-	rate1 := (float64(curRecord.HolderNum) - float64(preRecord.HolderNum)) / float64(preRecord.HolderNum)
-	rate2 := (float64(preRecord.HolderNum) - float64(pre2Record.HolderNum)) / float64(pre2Record.HolderNum)
-	if rate1 < rate && rate2 < rate {
-		//fmt.Printf("%d %d %d\n", pre2Record.HolderNum, preRecord.HolderNum, curRecord.HolderNum)
-		return true
+	var tag bool = true
+	var counter int64 = 0
+	for k, item := range list {
+		counter += 1
+		if counter > num {
+			break
+		}
+		preItem := list[k+1]
+		realRate := ((float64(item.HolderNum) - float64(preItem.HolderNum)) / float64(preItem.HolderNum)) * 100
+		if realRate > rate {
+			tag = false
+			break
+		}
 	}
-	return false
+	return tag
 }
