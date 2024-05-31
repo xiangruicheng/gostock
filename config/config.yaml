@@ -22,6 +22,8 @@ ddl:
     - stock_info
     - stock_quote
     - stock_people
+    - stock_block
+    - stock_block_code
     - macd
 
 xueqiu:

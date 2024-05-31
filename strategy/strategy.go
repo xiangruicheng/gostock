@@ -83,3 +83,30 @@ func Test3() {
 	fmt.Printf("%f %f %f\n", upNum, downNum, TotalPercent)
 
 }
+
+func Test4() {
+
+	for _, date := range TradeDay.Dates {
+		if date < "20230101" || date > "20250101" {
+			continue
+		}
+		startDate := TradeDay.PreTradeDate(date, 11)
+		endDate := TradeDay.NextTradeDate(date, 11)
+		if startDate == "" || endDate == "" {
+			continue
+		}
+		currKline, _ := new(model.KlineModel).GetByCodeAndDate("000001", date)
+		klines, _ := new(model.KlineModel).GetByCodeRangeDate("000001", startDate, endDate)
+		tag := false
+		for _, kline := range klines {
+			if max(kline.Close, kline.Open) > max(currKline.Open, currKline.Close) {
+				tag = true
+				continue
+			}
+		}
+		if tag == false {
+			fmt.Printf("%s %f\n", date, max(currKline.Close, currKline.Open))
+		}
+	}
+
+}

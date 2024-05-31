@@ -23,8 +23,7 @@ func main() {
 	if isCommand {
 		return
 	}
-
-	strategy.Test3()
+	//strategy.Test4()
 
 }
 
@@ -33,6 +32,7 @@ var commandConfig = map[string]any{
 	"make:stock":  datainit.InitStockInfo,
 	"make:kline":  datainit.BatchInitKline,
 	"make:people": datainit.BatchUpdateStockPeople,
+	"make:block":  datainit.InitBlock,
 
 	"report:real": report.Real,
 	"report:day":  report.Day,

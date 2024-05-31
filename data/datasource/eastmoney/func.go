@@ -73,6 +73,40 @@ func StockAll(market string) (*StockAllResponse, error) {
 	return stockAllRespons, nil
 }
 
+func Block(blockType int64) (*StockAllResponse, error) {
+	url := ""
+	if blockType == 1 {
+		url = "https://39.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=1000&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&dect=1&wbp2u=|0|0|0|web&fid=f3&fs=m:90+t:2+f:!50&fields=f12,f14"
+	}
+	if blockType == 2 {
+		url = "https://39.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=1000&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&dect=1&wbp2u=|0|0|0|web&fid=f3&fs=m:90+t:3+f:!50&fields=f12,f14"
+	}
+	stockAllRespons := new(StockAllResponse)
+	responseStr := request(url)
+	if responseStr == "" {
+		return stockAllRespons, errors.New("resp is empty")
+	}
+	err := json.Unmarshal([]byte(responseStr), &stockAllRespons)
+	if err != nil {
+		return stockAllRespons, err
+	}
+	return stockAllRespons, nil
+}
+
+func BlockCode(bkCode string) (*StockAllResponse, error) {
+	url := "https://push2.eastmoney.com/api/qt/clist/get?po=1&pz=500&pn=1&np=1&fltt=2&invt=2&fs=b%3A" + bkCode + "&fields=f12,f14"
+	stockAllRespons := new(StockAllResponse)
+	responseStr := request(url)
+	if responseStr == "" {
+		return stockAllRespons, errors.New("resp is empty")
+	}
+	err := json.Unmarshal([]byte(responseStr), &stockAllRespons)
+	if err != nil {
+		return stockAllRespons, err
+	}
+	return stockAllRespons, nil
+}
+
 func request(url string) string {
 	client := &http.Client{}
 	reqest, err := http.NewRequest("GET", url, nil)
