@@ -3,6 +3,7 @@ package report
 import (
 	"fmt"
 	"github.com/fatih/color"
+	"gostock/data/datasource/eastmoney"
 	"gostock/data/datasource/xueqiu"
 )
 
@@ -51,4 +52,20 @@ func Day() {
 		amount := quote.Data.Quote.Amount / 100000000
 		fmt.Printf("%10s|%s|%10.3f|%10.3f|%10.2f|\n", symbol, currentColor, quote.Data.Quote.Percent, quote.Data.Quote.Chg, amount)
 	}
+
+	//zdfb
+	resp, _ := eastmoney.Zdfb()
+	var z, f int
+	for _, item := range resp.Data.Fenbu {
+		for i := -20; i < 20; i++ {
+			if v, ok := item[i]; ok {
+				if i >= 0 {
+					z += v
+				} else {
+					f += v
+				}
+			}
+		}
+	}
+	fmt.Printf("UP:%d\nDOWN:%d\n", z, f)
 }

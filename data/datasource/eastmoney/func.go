@@ -107,6 +107,20 @@ func BlockCode(bkCode string) (*StockAllResponse, error) {
 	return stockAllRespons, nil
 }
 
+func Zdfb() (*ZdfbResponse, error) {
+	url := "https://push2ex.eastmoney.com/getTopicZDFenBu?ut=7eea3edcaed734bea9cbfc24409ed989&dpt=wz.ztzt"
+	zdfbResponse := new(ZdfbResponse)
+	responseStr := request(url)
+	if responseStr == "" {
+		return zdfbResponse, errors.New("resp is empty")
+	}
+	err := json.Unmarshal([]byte(responseStr), &zdfbResponse)
+	if err != nil {
+		return zdfbResponse, err
+	}
+	return zdfbResponse, nil
+}
+
 func request(url string) string {
 	client := &http.Client{}
 	reqest, err := http.NewRequest("GET", url, nil)

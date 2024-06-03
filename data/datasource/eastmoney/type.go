@@ -50,3 +50,15 @@ type StockAllResponse struct {
 		} `json:"diff"`
 	} `json:"data"`
 }
+
+type ZdfbResponse struct {
+	Rc   int `json:"rc"`
+	Rt   int `json:"rt"`
+	Svr  int `json:"svr"`
+	Lt   int `json:"lt"`
+	Full int `json:"full"`
+	Data struct {
+		Qdate int           `json:"qdate"`
+		Fenbu []map[int]int `json:"fenbu"`
+	} `json:"data"`
+}
