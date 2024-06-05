@@ -1,6 +1,11 @@
 package model
 
-import "gostock/server"
+import (
+	"database/sql"
+	"fmt"
+	"gostock/server"
+	"strings"
+)
 
 type StockQuoteRecord struct {
 	Id                 int32
@@ -77,4 +82,97 @@ func (dao *StockQuoteModel) IsExist(code string) (bool, error) {
 		return true, nil
 	}
 	return false, nil
+}
+
+func (model *StockQuoteModel) GetByCodes(codeArr []string, other string) ([]*StockQuoteRecord, error) {
+	codeStr := ""
+	for _, code := range codeArr {
+		codeStr += fmt.Sprintf("'%s',", code)
+	}
+	codeStr = strings.TrimRight(codeStr, ",")
+	sql := fmt.Sprintf("SELECT id,code,name,pe_forecast,pe_ttm,pe_lyr,pb,total_shares,float_shares,float_market_capital ,market_capital,amount,volume,turnover_rate,amplitude,navps,eps,volume_ratio,pankou_ratio,high,low,open,current,dividend,dividend_yield,date,c_time,u_time FROM stock_quote where code in(%s) %s", codeStr, other)
+	rows, err := server.MysqlClient.Query(sql)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	return model.query(rows)
+}
+
+func (model *StockQuoteModel) query(rows *sql.Rows) ([]*StockQuoteRecord, error) {
+	records := []*StockQuoteRecord{}
+	for rows.Next() {
+		record := new(StockQuoteRecord)
+		err := rows.Scan(&record.Id,
+			&record.Code,
+			&record.Name,
+			&record.PeForecast,
+			&record.PeTtm,
+			&record.PeLyr,
+			&record.Pb,
+			&record.TotalShares,
+			&record.FloatShares,
+			&record.FloatMarketCapital,
+			&record.MarketCapital,
+			&record.Amount,
+			&record.Volume,
+			&record.TurnoverRate,
+			&record.Amplitude,
+			&record.Navps,
+			&record.Eps,
+			&record.VolumeRatio,
+			&record.PankouRatio,
+			&record.High,
+			&record.Low,
+			&record.Open,
+			&record.Current,
+			&record.Dividend,
+			&record.DividendYield,
+			&record.Date,
+			&record.CTime,
+			&record.UTime)
+		if err != nil {
+			return nil, err
+		}
+		records = append(records, record)
+	}
+	return records, nil
+}
+
+func (model *StockQuoteModel) queryOne(rows *sql.Rows) (*StockQuoteRecord, error) {
+	record := new(StockQuoteRecord)
+	if rows.Next() {
+		err := rows.Scan(&record.Id,
+			&record.Code,
+			&record.Name,
+			&record.PeForecast,
+			&record.PeTtm,
+			&record.PeLyr,
+			&record.Pb,
+			&record.TotalShares,
+			&record.FloatShares,
+			&record.FloatMarketCapital,
+			&record.MarketCapital,
+			&record.Amount,
+			&record.Volume,
+			&record.TurnoverRate,
+			&record.Amplitude,
+			&record.Navps,
+			&record.Eps,
+			&record.VolumeRatio,
+			&record.PankouRatio,
+			&record.High,
+			&record.Low,
+			&record.Open,
+			&record.Current,
+			&record.Dividend,
+			&record.DividendYield,
+			&record.Date,
+			&record.CTime,
+			&record.UTime)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return record, nil
 }

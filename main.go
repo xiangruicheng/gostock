@@ -25,9 +25,11 @@ func main() {
 	}
 
 	//strategy.Feature.VolumeRateRange("000001", "20240531", 0, 10)
-	strategy.Test()
+	//strategy.Test()
 
 	//new(report.PeopleReport).Run()
+
+	report.BlockReport.Run()
 
 }
 
