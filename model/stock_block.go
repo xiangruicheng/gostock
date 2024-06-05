@@ -1,6 +1,7 @@
 package model
 
 import (
+	"database/sql"
 	"fmt"
 	"gostock/server"
 	"strings"
@@ -47,19 +48,49 @@ func (model *StockBlockModel) GetAll() ([]*StockBlockRecord, error) {
 	if err != nil {
 		return nil, err
 	}
-	stockblcokRecords := []*StockBlockRecord{}
+	return model.query(rows)
+}
+
+func (model *StockBlockModel) GetByCode(code string) (*StockBlockRecord, error) {
+	sql := "SELECT id,type,code,name,c_time,u_time FROM stock_block  where code=?"
+	rows, err := server.MysqlClient.Query(sql, code)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	return model.queryOne(rows)
+}
+
+func (model *StockBlockModel) query(rows *sql.Rows) ([]*StockBlockRecord, error) {
+	records := []*StockBlockRecord{}
 	for rows.Next() {
-		stockblcokRecord := new(StockBlockRecord)
-		err = rows.Scan(&stockblcokRecord.Id,
-			&stockblcokRecord.Type,
-			&stockblcokRecord.Code,
-			&stockblcokRecord.Name,
-			&stockblcokRecord.CTime,
-			&stockblcokRecord.UTime)
+		record := new(StockBlockRecord)
+		err := rows.Scan(&record.Id,
+			&record.Type,
+			&record.Code,
+			&record.Name,
+			&record.CTime,
+			&record.UTime)
 		if err != nil {
 			return nil, err
 		}
-		stockblcokRecords = append(stockblcokRecords, stockblcokRecord)
+		records = append(records, record)
 	}
-	return stockblcokRecords, nil
+	return records, nil
+}
+
+func (model *StockBlockModel) queryOne(rows *sql.Rows) (*StockBlockRecord, error) {
+	record := new(StockBlockRecord)
+	if rows.Next() {
+		err := rows.Scan(&record.Id,
+			&record.Type,
+			&record.Code,
+			&record.Name,
+			&record.CTime,
+			&record.UTime)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return record, nil
 }

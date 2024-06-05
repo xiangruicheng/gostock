@@ -29,7 +29,7 @@ func main() {
 
 	//new(report.PeopleReport).Run()
 
-	report.BlockReport.Run()
+	report.StockReport.Run("600905")
 
 }
 

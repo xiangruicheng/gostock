@@ -14,21 +14,21 @@ type Strategy interface {
 // 策略3：MACD金叉 T型 第二天开盘上涨等到收盘卖，第二天下跌开盘就卖 胜率2：1
 
 func Test() {
-	date := "20240531"
-	all, _ := new(model.StockInfoModel).GetAll()
+	date := "20240605"
+	all, _ := new(model.StockInfoModel).GetAllByTag("hs300")
 	for _, item := range all {
 		if item.Code[0:1] == "3" || item.Code[0:3] == "688" {
 			continue
 		}
-		if !Feature.IsLastXDaysCloseMin(item.Code, date, 30) {
+		if !Feature.IsLastXDaysCloseMin(item.Code, date, 50) {
 			continue
 		}
 
-		if Feature.IsLastXDaysMacdMin(item.Code, date, 30) {
+		if Feature.IsLastXDaysMacdMin(item.Code, date, 50) {
 			continue
 		}
 
-		fmt.Println(item.Code)
+		fmt.Println(item.Code, item.Name)
 	}
 }
 

@@ -50,6 +50,16 @@ func (model *StockBlockCodeModel) GetByBkCode(bkCode string) ([]*StockBlockCodeR
 	return model.query(rows)
 }
 
+func (model *StockBlockCodeModel) GetByCode(code string) ([]*StockBlockCodeRecord, error) {
+	sql := "SELECT id,bk_code,code,c_time,u_time FROM stock_block_code where code=?"
+	rows, err := server.MysqlClient.Query(sql, code)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	return model.query(rows)
+}
+
 func (model *StockBlockCodeModel) query(rows *sql.Rows) ([]*StockBlockCodeRecord, error) {
 	records := []*StockBlockCodeRecord{}
 	for rows.Next() {

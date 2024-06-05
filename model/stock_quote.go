@@ -99,6 +99,16 @@ func (model *StockQuoteModel) GetByCodes(codeArr []string, other string) ([]*Sto
 	return model.query(rows)
 }
 
+func (model *StockQuoteModel) GetByCode(code string) (*StockQuoteRecord, error) {
+	sql := fmt.Sprintf("SELECT id,code,name,pe_forecast,pe_ttm,pe_lyr,pb,total_shares,float_shares,float_market_capital ,market_capital,amount,volume,turnover_rate,amplitude,navps,eps,volume_ratio,pankou_ratio,high,low,open,current,dividend,dividend_yield,date,c_time,u_time FROM stock_quote where code=%s", code)
+	rows, err := server.MysqlClient.Query(sql)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	return model.queryOne(rows)
+}
+
 func (model *StockQuoteModel) query(rows *sql.Rows) ([]*StockQuoteRecord, error) {
 	records := []*StockQuoteRecord{}
 	for rows.Next() {
