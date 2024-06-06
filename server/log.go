@@ -1,9 +1,11 @@
 package server
 
 import (
+	"fmt"
 	"gostock/config"
 	"log"
 	"os"
+	"runtime"
 	"time"
 )
 
@@ -16,7 +18,7 @@ var Log *LogServer
 func init() {
 	Log = new(LogServer)
 	Log.logger = new(log.Logger)
-	Log.logger.SetFlags(log.Llongfile | log.Lmicroseconds | log.Ldate)
+	Log.logger.SetFlags(log.Lmicroseconds | log.Ldate)
 	// create log dir
 	_, err := os.Stat(config.Data.App.LogPath)
 	if err != nil {
@@ -38,6 +40,8 @@ func (l *LogServer) Info(msg string) {
 	file := l.getFile()
 	defer file.Close()
 	l.logger.SetPrefix("[INFO] ")
+	_, callFile, line, _ := runtime.Caller(1) // 1 表示调用logWithFileLine的函数
+	msg = fmt.Sprintf("%s:%d %s", callFile, line, msg)
 	l.logger.Println(msg)
 }
 
@@ -45,6 +49,8 @@ func (l *LogServer) Debug(msg string) {
 	file := l.getFile()
 	defer file.Close()
 	l.logger.SetPrefix("[DEBUG] ")
+	_, callFile, line, _ := runtime.Caller(1) // 1 表示调用logWithFileLine的函数
+	msg = fmt.Sprintf("%s:%d %s", callFile, line, msg)
 	l.logger.Println(msg)
 }
 
@@ -52,5 +58,7 @@ func (l *LogServer) Error(msg string) {
 	file := l.getFile()
 	defer file.Close()
 	l.logger.SetPrefix("[ERROR] ")
+	_, callFile, line, _ := runtime.Caller(1) // 1 表示调用logWithFileLine的函数
+	msg = fmt.Sprintf("%s:%d %s", callFile, line, msg)
 	l.logger.Println(msg)
 }
