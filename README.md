@@ -1,19 +1,29 @@
 # gostock
+This system  used to capture stock quotation data and analyze it
 
-## Instruction
-### 1 Create DB
-ddl.Create()
+## Initialization
+* 1 Create DB
+Create Database and create Table
+```
+go run main.go make:db
+```
+* 2 Init Stock info
+Init Table `stock_info` data, It is the basis for other functions
+```
+go run main.go make:stock
+```
+* 3 Init kline
+  Init Table `kline` data, days from `config.yaml` item `init-num` setting
+```
+go run main.go make:stock
+```
 
-### 2 Init Data
-* Init stock info 
+* 4 Init people
 ```
-datainit.InitStockInfo()
+go run main.go make:people
 ```
-* Init all kline 
+* 4 Init Block
 ```
-datainit.BatchInitKline()
+go run main.go make:block
 ```
-* Init kline for an code
-```
-ainit.InitKline(model.StockInfoModel_TypeEtf, "159915", "SZ", config.Data.Xueqiu.InitNum)
-```
+
