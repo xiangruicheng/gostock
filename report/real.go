@@ -5,22 +5,29 @@ import (
 	"github.com/fatih/color"
 	"gostock/data/datasource/eastmoney"
 	"gostock/data/datasource/xueqiu"
+	"strconv"
 )
 
 var RealPeportConfig = [][]string{
-	{"GF", "SH515790"},
-	{"CYB", "SZ159915"},
-	{"JG", "SH512660"},
+	{"BDT", "SH512480", "100000", "0.706"},
+	{"GF", "SH515790", "", ""},
+	{"CYB", "SZ159915", "", ""},
+	{"JG", "SH512660", "", ""},
 }
 
 // this is real
 func Real() {
-	fmt.Printf("%10s|%10s|%10s|%10s|%10s|\n", "TAG", "PRICE", "PERCENT", "High", "LOW")
-	fmt.Printf("%10s|%10s|%10s|%10s|%10s|\n", "----------", "----------", "----------", "----------", "----------")
+	fmt.Printf("%10s|%10s|%10s|%10s|%10s|%10s|%10s|\n", "TAG", "PRICE", "PERCENT", "High", "LOW", "COST", " P&L")
+	fmt.Printf("%10s|%10s|%10s|%10s|%10s|%10s|%10s|\n", "----------", "----------", "----------", "----------", "----------", "----------", "----------")
 	for _, item := range RealPeportConfig {
 		tag := item[0]
 		symbol := item[1]
+		cost, _ := strconv.ParseFloat(item[3], 64)
+		num, _ := strconv.ParseFloat(item[2], 64)
+
 		quote, _ := xueqiu.Quote(symbol)
+		pl := (quote.Data.Quote.Current - cost) * num
+
 		currentColor := ""
 		if quote.Data.Quote.Chg > 0 {
 			currentColor = color.RedString(fmt.Sprintf("%10.3f", quote.Data.Quote.Current))
@@ -29,7 +36,7 @@ func Real() {
 		} else {
 			currentColor = fmt.Sprintf("%10.3f", quote.Data.Quote.Current)
 		}
-		fmt.Printf("%10s|%s|%10.3f|%10.3f|%10.3f|\n", tag, currentColor, quote.Data.Quote.Percent, quote.Data.Quote.High, quote.Data.Quote.Low)
+		fmt.Printf("%10s|%s|%10.3f|%10.3f|%10.3f|%10.3f|%10.3f|\n", tag, currentColor, quote.Data.Quote.Percent, quote.Data.Quote.High, quote.Data.Quote.Low, cost, pl)
 	}
 }
 
