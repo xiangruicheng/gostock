@@ -103,6 +103,8 @@
         });
     }
 
+
+
     // 调用后端API获取更多信息
     function callBackendAPI(timestamp) {
         alert(timestamp)
@@ -124,6 +126,35 @@
 
     // 调用函数以获取数据并显示图表
     fetchKLineData();
+
+
+
+    // 监听键盘事件
+    document.addEventListener('keydown', function(event) {
+        //console.log(myChart.getOption().dataZoom[0])
+        var dataZoomOption = myChart.getOption().dataZoom[0]; // 获取数据区域缩放组件的配置
+        var step = 1; // 每次移动的步长，可以根据需要调整
+        switch (event.key) {
+            case 'ArrowLeft': // 左键
+             if (dataZoomOption.end > step) {
+                 dataZoomOption.start -= step;
+                 dataZoomOption.end -= step;
+             }
+             break;
+            case 'ArrowRight': // 右键
+             if (dataZoomOption.end < 100 - step) {
+                 dataZoomOption.start += step;
+                 dataZoomOption.end += step;
+             }
+            // 你可以添加对其他键的处理，如'ArrowUp'和'ArrowDown'进行缩放等
+            default:
+                break;
+        }
+        // 更新图表
+        myChart.setOption({
+          dataZoom: [dataZoomOption]
+        });
+    });
 </script>
 </body>
 </html>
