@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>ECharts K线图（可缩放）</title>
-    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.3.3/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- 引入jQuery以便使用$.ajax -->
 </head>
 <body style="height: 100%; margin: 0">
@@ -40,6 +40,29 @@
                                 '收盘价: ' + close + '<br/>' +
                                 '最低价: ' + low + '<br/>' +
                                 '最高价: ' + high;
+                        }
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            mark : {
+                                show : true,
+                                title : {
+                                    mark : '辅助线-开关',
+                                    markUndo : '辅助线-删除',
+                                    markClear : '辅助线-清空'
+                                },
+                                lineStyle : {
+                                    width : 1,
+                                    color : '#1e90ff',
+                                    type : 'dashed'
+                                }
+                            },
+                            dataZoom : {show: true},
+                            dataView : {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
                         }
                     },
                     // ... 其他配置项 ...

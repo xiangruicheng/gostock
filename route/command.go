@@ -4,7 +4,7 @@ import (
 	"gostock/data/datainit"
 	"gostock/data/ddl"
 	"gostock/report"
-	"gostock/server"
+	"gostock/util"
 	"os"
 	"reflect"
 )
@@ -22,7 +22,15 @@ var commandConfig = map[string]any{
 	"daily:kline": datainit.BatchIncrKline,
 	"daily:macd":  datainit.BatchUpdateMacd,
 	"daily:quote": datainit.BatchUpdateStockQuote,
-	"-h":          server.Help,
+	"-h":          help,
+}
+
+func help() {
+	util.PrintCommand("make:db", "Create DB and Create Table")
+	util.PrintCommand("make:stock", "Init stock_info Table")
+	util.PrintCommand("make:kline", "Init kline Table")
+	util.PrintCommand("make:people", "Init stock_people Table")
+	util.PrintCommand("make:block", "Init stock_block&stock_block_code Table")
 }
 
 func CommandInit() bool {
