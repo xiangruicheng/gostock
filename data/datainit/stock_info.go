@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func updateHs300() {
+func UpdateHs300() {
 	hs300Res, err := eastmoney.Hs300()
 	if err != nil {
 		server.Log.Error(fmt.Sprintf("UpdateHs300 fail %s", err.Error()))
@@ -58,7 +58,7 @@ func InitStockInfo() {
 	initIndexType()
 	initEtfType()
 
-	updateHs300()
+	UpdateHs300()
 	updateCyb()
 }
 
