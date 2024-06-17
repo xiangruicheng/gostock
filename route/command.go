@@ -9,35 +9,49 @@ import (
 	"reflect"
 )
 
-var commandConfig = map[string]any{
-	"make:db":     ddl.Create,
-	"make:stock":  datainit.InitStockInfo,
-	"make:kline":  datainit.BatchInitKline,
-	"make:people": datainit.BatchUpdateStockPeople,
-	"make:block":  datainit.InitBlock,
+type Command struct {
+	Key      string
+	Func     any
+	Descript string
+}
 
-	"report:real": report.Real,
-	"report:day":  report.Day,
+var CommandConfig []*Command
 
-	"daily:kline": datainit.BatchIncrKline,
-	"daily:macd":  datainit.BatchUpdateMacd,
-	"daily:quote": datainit.BatchUpdateStockQuote,
-	"-h":          help,
+func init() {
+	CommandConfig = []*Command{
+		{"make:db", ddl.Create, "Create DB and Create Table"},
+		{"make:stock", datainit.InitStockInfo, "Init stock_info Table"},
+		{"make:kline", datainit.BatchInitKline, "Init kline Table"},
+		{"make:people", datainit.BatchUpdateStockPeople, "Init stock_people Table"},
+		{"make:block", datainit.InitBlock, "Init stock_block Table"},
+
+		{"report:real", report.Real, "Report real"},
+		{"report:day", report.Day, "Report Day"},
+
+		{"daily:kline", datainit.BatchIncrKline, "Update K-line data daily"},
+		{"daily:macd", datainit.BatchUpdateMacd, "Update MACD data daily"},
+		{"daily:quote", datainit.BatchUpdateStockQuote, "Update quote data daily"},
+
+		{"-h", help, "help doc"},
+	}
 }
 
 func help() {
-	util.PrintCommand("make:db", "Create DB and Create Table")
-	util.PrintCommand("make:stock", "Init stock_info Table")
-	util.PrintCommand("make:kline", "Init kline Table")
-	util.PrintCommand("make:people", "Init stock_people Table")
-	util.PrintCommand("make:block", "Init stock_block&stock_block_code Table")
+	for _, command := range CommandConfig {
+		util.PrintCommand(command.Key, command.Descript)
+	}
 }
 
 func CommandInit() bool {
 	params := os.Args
 	if len(params) > 1 {
-		serverType := params[1]
-		method := commandConfig[serverType]
+		key := params[1]
+		var method any
+		for _, command := range CommandConfig {
+			if command.Key == key {
+				method = command.Func
+			}
+		}
 		if method != nil {
 			m := reflect.ValueOf(method)
 			m.Call(nil)
