@@ -11,3 +11,9 @@ func RouteInit() *gin.Engine {
 	r.GET("/kline", controller.Kline)
 	return r
 }
+
+func GinStart() {
+	// start http
+	r := RouteInit()
+	r.Run("127.0.0.1:9217")
+}

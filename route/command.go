@@ -20,7 +20,7 @@ var Commands []*CommandStruct
 func init() {
 	Commands = []*CommandStruct{
 		{"-h", help, "help doc"},
-		{"start", startGin, "start gin server"},
+		{"start", GinStart, "start gin server"},
 
 		{"make:db", ddl.Create, "Create DB and Create Table"},
 		{"make:stock", datainit.InitStockInfo, "Init stock_info Table"},
@@ -41,12 +41,6 @@ func help() {
 	for _, command := range Commands {
 		util.PrintCommand(command.Key, command.Descript)
 	}
-}
-
-func startGin() {
-	// start http
-	r := RouteInit()
-	r.Run("127.0.0.1:9217")
 }
 
 func CommandInit() bool {
