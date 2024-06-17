@@ -14,12 +14,8 @@ func main() {
 	strategy.TradeDay.InitTradeDay()
 
 	// exec command
-	isCommand := route.CommandInit()
-	if isCommand {
+	if route.CommandInit() {
 		return
 	}
 
-	// start http
-	r := route.RouteInit()
-	r.Run("127.0.0.1:9217")
 }

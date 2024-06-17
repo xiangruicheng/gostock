@@ -9,16 +9,19 @@ import (
 	"reflect"
 )
 
-type Command struct {
+type CommandStruct struct {
 	Key      string
 	Func     any
 	Descript string
 }
 
-var CommandConfig []*Command
+var Commands []*CommandStruct
 
 func init() {
-	CommandConfig = []*Command{
+	Commands = []*CommandStruct{
+		{"-h", help, "help doc"},
+		{"start", startGin, "start gin server"},
+
 		{"make:db", ddl.Create, "Create DB and Create Table"},
 		{"make:stock", datainit.InitStockInfo, "Init stock_info Table"},
 		{"make:kline", datainit.BatchInitKline, "Init kline Table"},
@@ -31,15 +34,19 @@ func init() {
 		{"daily:kline", datainit.BatchIncrKline, "Update K-line data daily"},
 		{"daily:macd", datainit.BatchUpdateMacd, "Update MACD data daily"},
 		{"daily:quote", datainit.BatchUpdateStockQuote, "Update quote data daily"},
-
-		{"-h", help, "help doc"},
 	}
 }
 
 func help() {
-	for _, command := range CommandConfig {
+	for _, command := range Commands {
 		util.PrintCommand(command.Key, command.Descript)
 	}
+}
+
+func startGin() {
+	// start http
+	r := RouteInit()
+	r.Run("127.0.0.1:9217")
 }
 
 func CommandInit() bool {
@@ -47,7 +54,7 @@ func CommandInit() bool {
 	if len(params) > 1 {
 		key := params[1]
 		var method any
-		for _, command := range CommandConfig {
+		for _, command := range Commands {
 			if command.Key == key {
 				method = command.Func
 			}
