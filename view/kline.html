@@ -51,7 +51,16 @@
             border-radius: 4px;
         }
 
-        .form-button {
+        .form-button-buy {
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-button-sell {
             padding: 10px 20px;
             background-color: #4CAF50;
             color: white;
@@ -75,11 +84,12 @@
             <!-- 这里可以放置左侧面板的内容，比如商品列表等 -->
         </div>
         <div class="right-panel">
-            <form class="right-panel-form">
-                <input type="text" class="form-input" placeholder="Input 1...">
-                <input type="text" class="form-input" placeholder="Input 2...">
+            <form class="right-panel-form" id="trade">
+                <input type="text" name="date" class="form-input" placeholder="date">
+                <input type="text" name="price" class="form-input" placeholder="price">
                 <!-- 可以根据需要添加更多输入框 -->
-                <button class="form-button">Submit</button>
+                <button class="form-button-buy" id="buy">Buy</button>
+                <button class="form-button-sell" id="sell">Sell</button>
             </form>
         </div>
     </div>

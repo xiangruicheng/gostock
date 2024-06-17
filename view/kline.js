@@ -86,7 +86,7 @@ function fetchKLineData() {
                     type: 'candlestick',
                     data: data.map(function(item) {
                         // 假设你的数据包含open, close, lowest, highest字段
-                        return [item.open, item.close, item.low, item.high];
+                        return [item.open, item.close, item.low, item.high,item.date];
                     })
                 }],
                 grid: {
@@ -106,11 +106,17 @@ function fetchKLineData() {
                     // 假设你的数据集存储在option.series[0].data中
                     var candleData = option.series[0].data[dataIndex];
 
+                    console.log(candleData)
                     // 你可以根据candleData中的信息来构造你要发送到后端的请求
-                    var timestamp = candleData[0]; // 假设第一个值是时间戳
+                    var date = candleData[4]; // 假设第一个值是时间戳
+                    var price = candleData[1];
+
+                    var $form = $('#trade');
+                    $form.find('input[name="date"]').val(date);
+                    $form.find('input[name="price"]').val(price);
 
                     // 调用后端接口获取更多信息
-                    callBackendAPI(timestamp);
+                    //callBackendAPI(timestamp);
                 }
             });
         },
@@ -144,6 +150,14 @@ function callBackendAPI(timestamp) {
 // 调用函数以获取数据并显示图表
 fetchKLineData();
 
+
+$("#buy").click(function (){
+    alert("buy")
+})
+
+$("#sell").click(function (){
+    alert("sell")
+})
 
 
 // 监听键盘事件
