@@ -9,6 +9,8 @@ func RouteInit() *gin.Engine {
 	r := gin.Default()
 	r.Use(CORS())
 	r.GET("/kline", controller.Kline)
+	r.POST("/user/init", controller.UserController.InitUser)
+
 	return r
 }
 

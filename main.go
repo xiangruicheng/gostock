@@ -18,4 +18,6 @@ func main() {
 		return
 	}
 
+	//new(report.PeopleReport).Run()
+
 }
