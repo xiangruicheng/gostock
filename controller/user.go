@@ -3,6 +3,7 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"gostock/model"
+	"gostock/strategy"
 	"strconv"
 	"time"
 )
@@ -33,4 +34,43 @@ func (c *UserControllerStruct) InitUser(ctx *gin.Context) {
 	} else {
 		ReturnSucc(ctx, map[string]any{"id": id})
 	}
+}
+
+func (c *UserControllerStruct) Hold(ctx *gin.Context) {
+	date := ctx.PostForm("date")
+	if date == "" {
+		ReturnError(ctx, 400, "date is null")
+		return
+	}
+	if !strategy.TradeDay.IsTradeDay(date) {
+		ReturnError(ctx, 400, "date not is trade day")
+		return
+	}
+
+	type Hold struct {
+		Code      string  `json:"code"`
+		CostPrice float64 `json:"cost_price"`
+		CurrPrice float64 `json:"curr_price"`
+		Number    int64   `json:"number"`
+		Cost      float64 `json:"cost"`
+		Percent   float64 `json:"percent"`
+		Money     float64 `json:"money"`
+	}
+
+	var uid int64 = 1
+	holdArr := []*Hold{}
+	holdRecordArr, _ := new(model.TradeHoldModel).GetByUid(uid)
+	for _, holdRecord := range holdRecordArr {
+		kline, _ := new(model.KlineModel).GetByCodeAndDate(holdRecord.Code, date)
+		hold := new(Hold)
+		hold.CostPrice = holdRecord.Price
+		hold.CurrPrice = kline.Close
+		hold.Number = holdRecord.Number
+		hold.Code = holdRecord.Code
+		hold.Cost = hold.CostPrice * float64(holdRecord.Number)
+		hold.Money = hold.CurrPrice * float64(holdRecord.Number)
+		hold.Percent = (hold.Money - hold.Cost) / hold.Cost
+		holdArr = append(holdArr, hold)
+	}
+	ReturnSucc(ctx, holdArr)
 }

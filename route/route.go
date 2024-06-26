@@ -10,6 +10,7 @@ func RouteInit() *gin.Engine {
 	r.Use(CORS())
 	r.GET("/kline", controller.Kline)
 	r.POST("/user/init", controller.UserController.InitUser)
+	r.POST("/user/hold", controller.UserController.Hold)
 
 	r.POST("/order/buy", controller.OrderController.Buy)
 	r.POST("/order/sell", controller.OrderController.Sell)

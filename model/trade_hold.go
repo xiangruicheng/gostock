@@ -61,6 +61,16 @@ func (model *TradeHoldModel) GetByUidAndCode(uid int64, code string) (*TradeHold
 	return model.queryOne(rows)
 }
 
+func (model *TradeHoldModel) GetByUid(uid int64) ([]*TradeHoldRecord, error) {
+	sql := "SELECT `id`,`uid`,`code`,`price`,`number`,`c_time`,`u_time` FROM trade_hold where uid=?"
+	rows, err := server.MysqlClient.Query(sql, uid)
+	defer rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	return model.query(rows)
+}
+
 func (model *TradeHoldModel) queryOne(rows *sql.Rows) (*TradeHoldRecord, error) {
 	record := new(TradeHoldRecord)
 	if rows.Next() {
@@ -76,5 +86,25 @@ func (model *TradeHoldModel) queryOne(rows *sql.Rows) (*TradeHoldRecord, error) 
 		}
 	}
 	return record, nil
+
+}
+
+func (model *TradeHoldModel) query(rows *sql.Rows) ([]*TradeHoldRecord, error) {
+	records := []*TradeHoldRecord{}
+	if rows.Next() {
+		record := new(TradeHoldRecord)
+		err := rows.Scan(&record.Id,
+			&record.Uid,
+			&record.Code,
+			&record.Price,
+			&record.Number,
+			&record.CTime,
+			&record.UTime)
+		if err != nil {
+			return nil, err
+		}
+		records = append(records, record)
+	}
+	return records, nil
 
 }
