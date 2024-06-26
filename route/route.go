@@ -12,6 +12,7 @@ func RouteInit() *gin.Engine {
 	r.POST("/user/init", controller.UserController.InitUser)
 
 	r.POST("/order/buy", controller.OrderController.Buy)
+	r.POST("/order/sell", controller.OrderController.Sell)
 
 	return r
 }
