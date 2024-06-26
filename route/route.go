@@ -11,11 +11,12 @@ func RouteInit() *gin.Engine {
 	r.GET("/kline", controller.Kline)
 	r.POST("/user/init", controller.UserController.InitUser)
 
+	r.POST("/order/buy", controller.OrderController.Buy)
+
 	return r
 }
 
 func GinStart() {
-	// start http
 	r := RouteInit()
 	r.Run("127.0.0.1:9217")
 }

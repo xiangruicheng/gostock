@@ -11,8 +11,9 @@ CREATE TABLE IF NOT EXISTS `trade_user` (
 
 
 CREATE TABLE IF NOT EXISTS `trade_order` (
-                                             `id` int NOT NULL AUTO_INCREMENT,
-                                             `uid` int(11) NOT NULL DEFAULT '0' COMMENT 'uid',
+    `id` int NOT NULL AUTO_INCREMENT,
+    `uid` int(11) NOT NULL DEFAULT '0' COMMENT 'uid',
+    `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '交易类型 1buy 2sell',
     `code` varchar(20) NOT NULL DEFAULT '' COMMENT '代码',
     `date` varchar(8) NOT NULL DEFAULT '' COMMENT '日期',
     `price` float(20,6) NOT NULL DEFAULT '0' COMMENT '价格',
@@ -25,14 +26,16 @@ CREATE TABLE IF NOT EXISTS `trade_order` (
     KEY `idx_uid` (`uid`) USING BTREE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
 
+
+
 CREATE TABLE IF NOT EXISTS `trade_hold` (
-                                            `id` int NOT NULL AUTO_INCREMENT,
-                                            `uid` int(11) NOT NULL DEFAULT '0' COMMENT 'uid',
+    `id` int NOT NULL AUTO_INCREMENT,
+    `uid` int(11) NOT NULL DEFAULT '0' COMMENT 'uid',
     `code` varchar(20) NOT NULL DEFAULT '' COMMENT '代码',
     `price` float(20,6) NOT NULL DEFAULT '0' COMMENT '价格',
     `number` int(11) NOT NULL DEFAULT '0' COMMENT '数量',
     `c_time` int unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
     `u_time` int unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
     PRIMARY KEY (`id`) USING BTREE,
-    KEY `idx_uid` (`uid`) USING BTREE
+    KEY `uniq_uid` (`uid`,`code`) USING BTREE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='持仓表';

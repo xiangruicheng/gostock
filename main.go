@@ -20,4 +20,6 @@ func main() {
 
 	//new(report.PeopleReport).Run()
 
+	strategy.Test()
+
 }
