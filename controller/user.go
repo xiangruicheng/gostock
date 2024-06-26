@@ -58,6 +58,7 @@ func (c *UserControllerStruct) Hold(ctx *gin.Context) {
 	}
 
 	var uid int64 = 1
+	var holdMoney float64
 	holdArr := []*Hold{}
 	holdRecordArr, _ := new(model.TradeHoldModel).GetByUid(uid)
 	for _, holdRecord := range holdRecordArr {
@@ -71,6 +72,16 @@ func (c *UserControllerStruct) Hold(ctx *gin.Context) {
 		hold.Money = hold.CurrPrice * float64(holdRecord.Number)
 		hold.Percent = (hold.Money - hold.Cost) / hold.Cost
 		holdArr = append(holdArr, hold)
+
+		holdMoney += hold.Money
 	}
-	ReturnSucc(ctx, holdArr)
+
+	userRecord, _ := new(model.TradeUserModel).GetById(uid)
+	userRecord.HoldMoney = holdMoney
+
+	result := map[string]any{
+		"user": userRecord,
+		"hold": holdArr,
+	}
+	ReturnSucc(ctx, result)
 }
