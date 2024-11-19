@@ -33,7 +33,7 @@ func (s *CybStrategy) Run() {
 }
 
 func (s *CybStrategy) runRangeTime(min string, max string) {
-	klines, _ := new(model.KlineModel).GetByCodeRangeDate("159915", "20100101", "20250101")
+	klines, _ := new(model.KlineModel).GetByCodeRangeDate("159915", min, max)
 	var downDyas int
 	var nextDayPercentTotal float64
 

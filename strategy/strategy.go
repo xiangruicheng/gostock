@@ -14,7 +14,7 @@ type Strategy interface {
 // 策略3：MACD金叉 T型 第二天开盘上涨等到收盘卖，第二天下跌开盘就卖 胜率2：1
 
 func Test() {
-	date := "20240624"
+	date := "20240703"
 	all, _ := new(model.StockInfoModel).GetAll()
 	for _, item := range all {
 
@@ -22,7 +22,7 @@ func Test() {
 			continue
 		}
 
-		fmt.Println(item.Code, item.Name)
+		fmt.Println(item.Code)
 	}
 }
 

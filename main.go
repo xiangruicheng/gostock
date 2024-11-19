@@ -20,6 +20,6 @@ func main() {
 
 	//new(report.PeopleReport).Run()
 
-	strategy.Test()
+	new(strategy.Threeban).Run()
 
 }
