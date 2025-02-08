@@ -8,6 +8,9 @@ import (
 )
 
 func main() {
+	// 现金流折现计算
+	//strategy.Dcf.Demo()
+
 	config.InitConfig()
 	server.InitRedis()
 	server.InitMysql()
