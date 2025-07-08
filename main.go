@@ -10,6 +10,7 @@ import (
 func main() {
 	// 现金流折现计算
 	//strategy.Dcf.Demo()
+	//return
 
 	config.InitConfig()
 	server.InitRedis()

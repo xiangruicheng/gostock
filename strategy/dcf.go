@@ -12,10 +12,10 @@ func init() {
 }
 
 func (s *DcfStruct) Demo() {
-	var profit float64 = 1.4
-	var gr float64 = 0.05
-	var tenAfterGr float64 = 0.02
-	var r float64 = 0.1
+	var profit float64 = 2.179
+	var gr float64 = 0.08
+	var tenAfterGr float64 = 0.03
+	var r float64 = 0.08
 	s.Dcf(profit, gr, tenAfterGr, r)
 }
 
