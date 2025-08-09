@@ -98,7 +98,7 @@ func initStockType() {
 			server.Log.Error(fmt.Sprintf("initStockType %s fail,%s", market, err.Error()))
 			return
 		}
-		for _, item := range stockAll.Data.Diff {
+		for _, item := range stockAll {
 			stockInfoRecord := new(model.StockInfoRecord)
 			stockInfoRecord.Code = item.Code
 			stockInfoRecord.Name = item.Name

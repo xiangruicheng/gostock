@@ -166,7 +166,7 @@ func (s *MacdStrategy) Run() {
 }
 
 // afterXKline Date After X day Kline
-func afterXKline(klines []*model.KlineRecord, date string, x int) *model.KlineRecord {
+func afterXKline(klines []*model.Kline, date string, x int) *model.Kline {
 	xTag := 0
 	for _, kline := range klines {
 		if kline.Date > date {

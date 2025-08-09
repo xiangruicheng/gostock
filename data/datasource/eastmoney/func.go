@@ -3,8 +3,11 @@ package eastmoney
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+	"gostock/model"
 	"io"
 	"net/http"
+	"time"
 )
 
 func Hs300() (*Hs300Response, error) {
@@ -49,28 +52,45 @@ func Cyb() (*StockAllResponse, error) {
 	return stockAllRespons, nil
 }
 
-func StockAll(market string) (*StockAllResponse, error) {
-	url := ""
-	if market == "SH" {
-		url = "https://45.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5000&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&dect=1&wbp2u=|0|0|0|web&fid=f3&fs=m:1+t:2,m:1+t:23&fields=f12,f14"
-	}
-	if market == "SZ" {
-		url = "https://45.push2.eastmoney.com/api/qt/clist/get?pn=1&pz=5000&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&dect=1&wbp2u=|0|0|0|web&fid=f3&fs=m:0+t:6,m:0+t:80&fields=f12,f14"
-	}
-	if url == "" {
-		return nil, errors.New("market error")
-	}
+func StockAll(market string) ([]*model.StockInfoRecord, error) {
+	records := []*model.StockInfoRecord{}
+	pz := "20"
+	for pn := 1; pn < 2000; pn++ {
+		time.Sleep(1 * time.Second)
+		fmt.Printf("执行分页pn=%d\n", pn)
+		url := ""
+		if market == "SH" {
+			url = "https://push2.eastmoney.com/api/qt/clist/get?np=1&fltt=1&invt=2&fs=m%3A1%2Bt%3A2%2Cm%3A1%2Bt%3A23&fields=f12,f14&fid=f3&pn=" + fmt.Sprintf("%d", pn) + "&pz=" + pz + "&po=1&dect=1&ut=fa5fd1943c7b386f172d6893dbfba10b&wbp2u=%7C0%7C0%7C0%7Cweb&_=1754745689393"
+		}
+		if market == "SZ" {
+			url = "https://push2.eastmoney.com/api/qt/clist/get?np=1&fltt=1&invt=2&fs=m%3A0%2Bt%3A6%2Cm%3A0%2Bt%3A80&fields=f12,f14&fid=f3&pn=" + fmt.Sprintf("%d", pn) + "&pz=" + pz + "&po=1&dect=1&ut=fa5fd1943c7b386f172d6893dbfba10b&wbp2u=%7C0%7C0%7C0%7Cweb&_=1754745689397"
+		}
+		if url == "" {
+			return nil, errors.New("market error")
+		}
 
-	stockAllRespons := new(StockAllResponse)
-	responseStr := request(url)
-	if responseStr == "" {
-		return stockAllRespons, errors.New("resp is empty")
+		stockAllRespons := new(StockAllResponse)
+		responseStr := request(url)
+
+		if responseStr == "" {
+			return records, errors.New("resp is empty")
+		}
+		err := json.Unmarshal([]byte(responseStr), &stockAllRespons)
+		if len(stockAllRespons.Data.Diff) <= 0 {
+			break
+		}
+		if err != nil {
+			return records, err
+		}
+		for _, item := range stockAllRespons.Data.Diff {
+			records = append(records, &model.StockInfoRecord{
+				Market: market,
+				Name:   item.Name,
+				Code:   item.Code,
+			})
+		}
 	}
-	err := json.Unmarshal([]byte(responseStr), &stockAllRespons)
-	if err != nil {
-		return stockAllRespons, err
-	}
-	return stockAllRespons, nil
+	return records, nil
 }
 
 func Block(blockType int64) (*StockAllResponse, error) {

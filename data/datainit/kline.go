@@ -17,9 +17,9 @@ func InitKline(code string, market string, days int64) int64 {
 		server.Log.Error(err.Error())
 		return 0
 	}
-	klineRecords := []*model.KlineRecord{}
+	klineRecords := []*model.Kline{}
 	for _, kline := range klines {
-		klineRecord := new(model.KlineRecord)
+		klineRecord := new(model.Kline)
 		klineRecord.Code = code
 		klineRecord.Date = util.FormatDate(kline.Time)
 		klineRecord.Volume = kline.Volume

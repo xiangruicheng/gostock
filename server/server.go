@@ -8,10 +8,28 @@ import (
 	"github.com/redis/go-redis/v9"
 	"gostock/config"
 	"log"
+	"xorm.io/xorm"
 )
 
 var RedisClient *redis.Client
 var MysqlClient *sql.DB
+var MysqlEngine *xorm.Engine
+
+func InitMysqlEngine() {
+	connStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb3",
+		config.Data.Mysql.Username,
+		config.Data.Mysql.Password,
+		config.Data.Mysql.Host,
+		config.Data.Mysql.Port,
+		config.Data.Mysql.Dbname,
+	)
+	engine, err := xorm.NewEngine("mysql", connStr)
+	if err != nil {
+		log.Println("datainit InitMysqlEngine fail")
+		return
+	}
+	MysqlEngine = engine
+}
 
 func InitMysql() {
 	dns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s",

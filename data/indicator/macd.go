@@ -85,7 +85,7 @@ func (s *Macd) Run(code string) {
 	}
 }
 
-func (s *Macd) klineRecordConvertMacdRecord(list []*model.KlineRecord) []*model.MacdRecord {
+func (s *Macd) klineRecordConvertMacdRecord(list []*model.Kline) []*model.MacdRecord {
 	resp := []*model.MacdRecord{}
 	for _, row := range list {
 		macdModel := new(model.MacdRecord)
