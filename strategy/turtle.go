@@ -8,33 +8,49 @@ import (
 
 // 海龟策略
 type Turtle struct {
-	Code       string
-	TotalMoney float64
-	Risk       float64
+	Code       string   // 股票代码
+	TotalMoney float64  // 总金额
+	Risk       float64  // 承受的风险比例
 	CurrTrade  *Trade   // 当前交易
 	Trades     []*Trade // 交易记录
 }
 
+// 海龟K线数据
+type TurtleKline struct {
+	Date              string
+	Atr               float64
+	Open              float64
+	Close             float64
+	High              float64
+	Low               float64
+	Tr                float64 // TR振幅
+	High20            float64 // 当日的近20日最高价，收盘后才知道
+	Low10             float64 // 当日的近10日最低价，收盘后才知道
+	IsBreakoutUp      bool    // 是否向上突破，与上一日的high20比较，用于回测
+	IsBreakoutFirstUp bool    // 是否首次向上突破
+	IsBreakoutDown    bool    // 是否向下破位，与上一日的low10比较，用于回测
+}
+
 type Trade struct {
-	Atr       float64
-	Num       int64
-	AvgPrice  float64
-	BuyPrice  float64
-	BuyDate   string
-	SellPrice float64
-	SellDate  string
-	Earn      float64
+	Atr       float64 // atr 平均振幅
+	Num       int64   //持仓数量
+	AvgPrice  float64 //平均价格
+	BuyPrice  float64 //最后买入价格
+	BuyDate   string  //最后买入日期
+	SellPrice float64 //卖出价格
+	SellDate  string  //卖出日期
+	Earn      float64 //收益
 }
 
 func (s *Turtle) Help() {
 	fmt.Println("海龟策略")
-
-	//1. **入场规则**：
-	//- **突破入场**：当股价突破过去20个交易日的最高价时，买入股票。
-	//- **加仓规则**：如果股价在买入后继续上涨（例如每上涨0.5个ATR），则追加头寸，但总头寸不超过最大限制（通常为4个单元）。
-	//2. **离场规则**：
-	//- **止损离场**：当股价从买入价下跌2倍ATR时，止损出场。
-	//- **止盈离场**：当股价跌破过去10日的最低价时，卖出全部头寸。
+	// 使用方法
+	/*s := &strategy.Turtle{
+		Code:       "512480",
+		TotalMoney: 1000000.00,
+		Risk:       0.01,
+	}
+	s.Run()*/
 }
 
 func (s *Turtle) Run() {
@@ -45,7 +61,6 @@ func (s *Turtle) Run() {
 	for k, turtleKline := range turtleKlines {
 
 		//fmt.Println(turtleKline)
-
 		// buy
 		if s.CurrTrade == nil {
 			if turtleKline.IsBreakoutFirstUp {
@@ -104,22 +119,6 @@ func (s *Turtle) Run() {
 		}
 	}
 	fmt.Println(totalEarn)
-}
-
-// 海龟K线数据
-type TurtleKline struct {
-	Date              string
-	Atr               float64
-	Open              float64
-	Close             float64
-	High              float64
-	Low               float64
-	Tr                float64 // TR振幅
-	High20            float64 // 当日的近20日最高价，收盘后才知道
-	Low10             float64 // 当日的近10日最低价，收盘后才知道
-	IsBreakoutUp      bool    // 是否向上突破，与上一日的high20比较，用于回测
-	IsBreakoutFirstUp bool    // 是否首次向上突破
-	IsBreakoutDown    bool    // 是否向下破位，与上一日的low10比较，用于回测
 }
 
 // 计算仓位

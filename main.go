@@ -26,13 +26,4 @@ func main() {
 		return*/
 	//new(report.PeopleReport).Run()
 
-	var s strategy.StrategyInterface
-	s = &strategy.Turtle{
-		Code:       "002317",
-		TotalMoney: 1000000.00,
-		Risk:       0.01,
-	}
-	s.Help()
-	s.Run()
-
 }
