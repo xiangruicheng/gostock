@@ -8,8 +8,8 @@ import (
 type MacdStrategy struct {
 }
 
-func (s *MacdStrategy) gold(code string) []*model.MacdRecord {
-	list := []*model.MacdRecord{}
+func (s *MacdStrategy) gold(code string) []*model.Macd {
+	list := []*model.Macd{}
 	macds, _ := new(model.MacdModel).GetByCode(code)
 	for k, curMacd := range macds {
 		if k-1 < 0 {
@@ -23,8 +23,8 @@ func (s *MacdStrategy) gold(code string) []*model.MacdRecord {
 	return list
 }
 
-func (s *MacdStrategy) die(code string) []*model.MacdRecord {
-	list := []*model.MacdRecord{}
+func (s *MacdStrategy) die(code string) []*model.Macd {
+	list := []*model.Macd{}
 	macds, _ := new(model.MacdModel).GetByCode(code)
 	for k, curMacd := range macds {
 		if k-1 < 0 {
@@ -38,8 +38,8 @@ func (s *MacdStrategy) die(code string) []*model.MacdRecord {
 	return list
 }
 
-func (s *MacdStrategy) dbl(code string) []*model.MacdRecord {
-	list := []*model.MacdRecord{}
+func (s *MacdStrategy) dbl(code string) []*model.Macd {
+	list := []*model.Macd{}
 	macds := s.gold(code)
 	for k, curMacd := range macds {
 		if k-1 < 0 {
@@ -57,8 +57,8 @@ func (s *MacdStrategy) dbl(code string) []*model.MacdRecord {
 	return list
 }
 
-func (s *MacdStrategy) gold2buy(code string) []*model.MacdRecord {
-	list := []*model.MacdRecord{}
+func (s *MacdStrategy) gold2buy(code string) []*model.Macd {
+	list := []*model.Macd{}
 	macds := s.gold(code)
 	for k, curMacd := range macds {
 		if k-2 < 0 {
@@ -96,7 +96,7 @@ func (s *MacdStrategy) printStrategyResult(r *StrategyResult) {
 
 }
 
-func (s *MacdStrategy) sellDie(klines []*model.MacdRecord, date string) *model.MacdRecord {
+func (s *MacdStrategy) sellDie(klines []*model.Macd, date string) *model.Macd {
 	for _, kline := range klines {
 		if kline.Date > date {
 			return kline

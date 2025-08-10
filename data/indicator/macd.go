@@ -24,7 +24,7 @@ func (s *Macd) Run(code string) {
 	var prevEma12 float64
 	var prevEma26 float64
 	var prevDea float64
-	var lastRow *model.MacdRecord
+	var lastRow *model.Macd
 	var beginDate string
 
 	hisMacdDatas, _ := new(model.MacdModel).GetByCode(code)
@@ -85,10 +85,10 @@ func (s *Macd) Run(code string) {
 	}
 }
 
-func (s *Macd) klineRecordConvertMacdRecord(list []*model.Kline) []*model.MacdRecord {
-	resp := []*model.MacdRecord{}
+func (s *Macd) klineRecordConvertMacdRecord(list []*model.Kline) []*model.Macd {
+	resp := []*model.Macd{}
 	for _, row := range list {
-		macdModel := new(model.MacdRecord)
+		macdModel := new(model.Macd)
 		macdModel.Code = row.Code
 		macdModel.Date = row.Date
 		macdModel.Close = row.Close
