@@ -4,15 +4,14 @@ import (
 	"fmt"
 	"gostock/model"
 	"math"
+	"strconv"
 )
 
 // 海龟策略
 type Turtle struct {
-	Code       string   // 股票代码
-	TotalMoney float64  // 总金额
-	Risk       float64  // 承受的风险比例
-	CurrTrade  *Trade   // 当前交易
-	Trades     []*Trade // 交易记录
+	Code       string  // 股票代码
+	TotalMoney float64 // 总金额
+	Risk       float64 // 承受的风险比例
 }
 
 // 海龟K线数据
@@ -31,7 +30,7 @@ type TurtleKline struct {
 	IsBreakoutDown    bool    // 是否向下破位，与上一日的low10比较，用于回测
 }
 
-type Trade struct {
+type TradeR struct {
 	Atr       float64 // atr 平均振幅
 	Num       int64   //持仓数量
 	AvgPrice  float64 //平均价格
@@ -54,71 +53,41 @@ func (s *Turtle) Help() {
 }
 
 func (s *Turtle) Run() {
+	if s.Code == "" {
+		fmt.Printf("缺少股票代码")
+		return
+	}
 	klines, _ := new(model.KlineModel).GetByCode(s.Code)
 	turtleKlines := s.initTurtleKline(klines)
 
-	totalEarn := 0.0
+	trade := new(Trade)
 	for k, turtleKline := range turtleKlines {
-
-		//fmt.Println(turtleKline)
-		// buy
-		if s.CurrTrade == nil {
+		if !trade.IsHold {
 			if turtleKline.IsBreakoutFirstUp {
 				buyPrice := turtleKlines[k-1].High20
 				atr, position := s.position(turtleKline)
-				currTrade := new(Trade)
-				currTrade.BuyDate = turtleKline.Date
-				currTrade.BuyPrice = buyPrice
-				currTrade.AvgPrice = buyPrice
-				currTrade.Num = position
-				currTrade.Atr = atr
-				s.CurrTrade = currTrade
-
-				fmt.Printf("BUY : date=%s 价格=%f 成本=%f atr=%f 买入仓位=%d 总仓位=%d \n", turtleKline.Date, buyPrice, buyPrice, atr, position, position)
+				trade.Buy(turtleKline.Date, buyPrice, position, fmt.Sprintf("%f", atr))
 			}
 		}
 		// sell
-		if s.CurrTrade != nil {
-			sellType := 0
-			sellPrice := 0.0
-			if turtleKline.IsBreakoutDown {
-				sellType = 1
-				sellPrice = turtleKlines[k-1].Low10
-			}
-			if turtleKline.Low < (s.CurrTrade.BuyPrice - 2*s.CurrTrade.Atr) {
-				sellType = 2
-				sellPrice = s.CurrTrade.BuyPrice - 2*s.CurrTrade.Atr
-			}
-			if sellType > 0 {
-				s.CurrTrade.SellPrice = sellPrice
-				s.CurrTrade.SellDate = turtleKline.Date
-				earn := (s.CurrTrade.SellPrice - s.CurrTrade.BuyPrice) * float64(s.CurrTrade.Num)
-				s.CurrTrade.Earn = earn
-				totalEarn += earn
-				fmt.Printf("SELL: date=%s 价格=%f 收益=%f type=%d \n\n", turtleKline.Date, sellPrice, earn, sellType)
-				s.CurrTrade = nil
-			}
-		}
+		if trade.IsHold {
+			sellPrice := turtleKlines[k-1].Low10 //卖出价格
+			lastTradeRecord := trade.GetLastRecord()
+			lastAtr, _ := strconv.ParseFloat(lastTradeRecord.Other, 64)
+			stopPrice := lastTradeRecord.Price - 2*lastAtr //止损价格
 
-		//ADD
-		if s.CurrTrade != nil {
-			continue
-			addPrice := s.CurrTrade.BuyPrice + 0.5*s.CurrTrade.Atr
-			atr, position := s.position(turtleKline)
-			avgPrice := (float64(position)*addPrice + float64(s.CurrTrade.Num)*s.CurrTrade.AvgPrice) / float64(position+s.CurrTrade.Num)
-			if turtleKline.High > addPrice && turtleKline.Date != s.CurrTrade.BuyDate {
-				s.CurrTrade.BuyDate = turtleKline.Date
-				s.CurrTrade.BuyPrice = addPrice
-				s.CurrTrade.Num += position
-				s.CurrTrade.AvgPrice = avgPrice
-				s.CurrTrade.Atr = atr
-
-				fmt.Printf("ADD : date=%s 价格=%f 成本=%f atr=%f 买入仓位=%d 总仓位=%d \n", turtleKline.Date, addPrice, s.CurrTrade.AvgPrice, atr, position, s.CurrTrade.Num)
+			if turtleKline.Low < stopPrice && turtleKline.IsBreakoutDown {
+				trade.Stop(turtleKline.Date, max(sellPrice, stopPrice), trade.GetTotalNum(), "")
+			} else if turtleKline.IsBreakoutDown {
+				trade.Sell(turtleKline.Date, sellPrice, trade.GetTotalNum(), "")
+			} else if turtleKline.Low < stopPrice {
+				trade.Stop(turtleKline.Date, stopPrice, trade.GetTotalNum(), "")
 			}
 
 		}
+
 	}
-	fmt.Println(totalEarn)
+	trade.Report()
 }
 
 // 计算仓位

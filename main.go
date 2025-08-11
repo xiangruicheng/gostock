@@ -26,4 +26,11 @@ func main() {
 		return*/
 	//new(report.PeopleReport).Run()
 
+	s := &strategy.Turtle{
+		Code:       "688235",
+		TotalMoney: 1000000.00,
+		Risk:       0.01,
+	}
+	s.Run()
+
 }
